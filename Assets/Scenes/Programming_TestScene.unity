@@ -681,7 +681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 754d6230d109b304daf67c75fb845548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pullStrength: 10
+  _pullStrength: 50
   _timeToCatch: 3
 --- !u!212 &1072922298
 SpriteRenderer:
@@ -1027,9 +1027,21 @@ PrefabInstance:
       value: FishingRod
       objectReference: {fileID: 0}
     - target: {fileID: 5779692207610354242, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
+      propertyPath: _maxAngle
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 5779692207610354242, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
+      propertyPath: _minAngle
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5779692207610354242, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
       propertyPath: _hookedFish
       value: 
       objectReference: {fileID: 1072922297}
+    - target: {fileID: 5779692207610354242, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
+      propertyPath: _pullStrength
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
