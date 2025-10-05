@@ -21,7 +21,7 @@ public class TimeTracker : Singleton<TimeTracker>
     void Update()
     {
         if (_dayComplete) return;
-        
+
         _currentTime += Time.deltaTime;
 
         if (_currentTime >= _lengthOfDay)
@@ -52,6 +52,8 @@ public class TimeTracker : Singleton<TimeTracker>
     {
         return _currentTime;
     }
+
+    public float GetLengthOfDay() { return _lengthOfDay; }
 
 }
 
