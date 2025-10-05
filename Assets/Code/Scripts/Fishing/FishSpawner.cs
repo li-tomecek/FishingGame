@@ -17,7 +17,7 @@ public class FishSpawner : TimedCommand
 
     public override bool CanExecute()
     {
-        //If the player is not currently reeling in anothe fish
+        //If the player is not currently reeling in another fish
         return true;    //TEMP
     }
 

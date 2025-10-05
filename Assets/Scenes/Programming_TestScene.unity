@@ -349,8 +349,9 @@ GameObject:
   m_Component:
   - component: {fileID: 632753452}
   - component: {fileID: 632753451}
+  - component: {fileID: 632753453}
   m_Layer: 0
-  m_Name: '[Input Manager]'
+  m_Name: '[Managers]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -383,6 +384,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &632753453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632753450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae2016757bbb4d42a7fc70750629b11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lengthOfDay: 120
+  DaytimeStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  DayComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &645023703
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,8 +941,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bce53ad2f0b37a04885c35d322bb3447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minElapsedTime: 1
-  _maxElapsedTime: 5
+  _minElapsedTime: 5
+  _maxElapsedTime: 15
   _fishPrefab: {fileID: 5676286539144468332, guid: b0d7ec7b274966947ac71812689d2f8d, type: 3}
   _amountToPool: 5
 --- !u!1001 &383011745066018623
