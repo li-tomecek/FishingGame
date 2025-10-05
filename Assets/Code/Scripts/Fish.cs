@@ -1,20 +1,44 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider2D))]
 public class Fish : MonoBehaviour
 {
 
-    [SerializeField] float _pullStrength = 15f;
-    [SerializeField] float _timeToCatch = 3f;
-    private float _catchTimer;
-    private Coroutine _timerRoutine;
+    [Header("Catching the Fish")]
+    [SerializeField] float _pullStrength = 15f;     // How strong the fish pulls on the line
+    [SerializeField] float _timeToCatch = 3f;       // How long it takes to catch the fish
+    [SerializeField] int _value = 100;              // For the score
+    [SerializeField] LayerMask _hookLayer;
 
+    [Header("Swimming")]
+    [SerializeField] float _swimSpeed = 10f;
+
+    private bool _hooked;
+    private Coroutine _timerRoutine;
     public float PullStrength => _pullStrength;
 
+    #region Swimming
+    void FixedUpdate()
+    {
+        if (_hooked) return;
 
+        transform.Translate(-_swimSpeed * Time.fixedDeltaTime, 0f, 0f);     //move left on-screen by swim speed
+    }
+
+    void OnTriggerEnter2D(Collider2D other)     //This should maybe be moved to the rod?
+    {
+        _hooked = true;
+        //TODO: play visual/audio cues here!
+        other.gameObject.GetComponentInParent<FishingRod>().HookFish(this);
+    }
+    #endregion
+
+
+    #region Catching Fish
     public void StartTimer()
     {
-        _catchTimer = _timeToCatch;
         _timerRoutine = StartCoroutine(CatchTimer());
         Debug.Log("timer started");
     }
@@ -29,13 +53,17 @@ public class Fish : MonoBehaviour
 
     public IEnumerator CatchTimer()
     {
-        while (_catchTimer > 0)
-        {
-            yield return 0;
-            _catchTimer -= Time.deltaTime;
-        }
+        yield return new WaitForSeconds(_timeToCatch);
 
         Debug.Log("FishCaught!");
     }
+
+    public void ReleaseFish()
+    {
+        _hooked = false;
+        gameObject.SetActive(false);    //to send fish back to object pool
+    }
+
+    #endregion
 
 }

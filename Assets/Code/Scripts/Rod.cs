@@ -1,12 +1,9 @@
-using System;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class Rod : MonoBehaviour, IButtonListener
+public class FishingRod : MonoBehaviour, IButtonListener
 {
-    private float _rodAngle;
     private bool _isInRange;
-    [SerializeField] private Fish _hookedFish;      //Serialized for testing
+    [SerializeField] GameObject _rod;
 
     [SerializeField] Transform _rotationOrigin;
     [SerializeField] float _maxAngle, _minAngle, _targetAngle, _acceptedRange;
@@ -14,11 +11,12 @@ public class Rod : MonoBehaviour, IButtonListener
     [Header("Button Controls")]
     [SerializeField] float _pullStrength = 15f;     //Rotation of rod per second
     private float _currentPullStrength;
+    private Fish _hookedFish;
 
     void Start()
     {
         FindFirstObjectByType<PlayerInputs>().RegisterListener(this);
-        gameObject.transform.RotateAround(_rotationOrigin.position, UnityEngine.Vector3.forward, _targetAngle);
+        _rod.transform.RotateAround(_rotationOrigin.position, Vector3.forward, _targetAngle);
     }
 
     public void FixedUpdate()
@@ -31,11 +29,11 @@ public class Rod : MonoBehaviour, IButtonListener
         if (_hookedFish == null) return;
 
         float deltaRotation = (_currentPullStrength - _hookedFish.PullStrength) * Time.fixedDeltaTime;
-        deltaRotation = Mathf.Clamp(deltaRotation, _minAngle - transform.eulerAngles.z, _maxAngle - transform.eulerAngles.z);
+        deltaRotation = Mathf.Clamp(deltaRotation, _minAngle - _rod.transform.eulerAngles.z, _maxAngle - _rod.transform.eulerAngles.z);
 
-        gameObject.transform.RotateAround(_rotationOrigin.position, UnityEngine.Vector3.forward, deltaRotation);
+        _rod.transform.RotateAround(_rotationOrigin.position, Vector3.forward, deltaRotation);
 
-        if (transform.eulerAngles.z < _targetAngle - _acceptedRange || transform.eulerAngles.z > _targetAngle + _acceptedRange)
+        if (_rod.transform.eulerAngles.z < _targetAngle - _acceptedRange || _rod.transform.eulerAngles.z > _targetAngle + _acceptedRange)
         {
             if (_isInRange) //Just left the accepted range
                 _hookedFish.ResetTimer();
@@ -46,9 +44,13 @@ public class Rod : MonoBehaviour, IButtonListener
         {
             _isInRange = true;
             _hookedFish.StartTimer();
-                
-        }
 
+        }
+    }
+
+    public void HookFish(Fish fish)
+    {
+        _hookedFish = fish;
     }
 
     #region Button actions
