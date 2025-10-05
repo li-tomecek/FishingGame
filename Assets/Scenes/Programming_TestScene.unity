@@ -893,7 +893,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2023299632
 Transform:
   m_ObjectHideFlags: 0
@@ -921,8 +921,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bce53ad2f0b37a04885c35d322bb3447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minElapsedTime: 0.5
-  _maxElapsedTime: 3
+  _minElapsedTime: 1
+  _maxElapsedTime: 5
   _fishPrefab: {fileID: 5676286539144468332, guid: b0d7ec7b274966947ac71812689d2f8d, type: 3}
   _amountToPool: 5
 --- !u!1001 &383011745066018623
