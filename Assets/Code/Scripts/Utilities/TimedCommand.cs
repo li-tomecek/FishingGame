@@ -7,12 +7,13 @@ public abstract class TimedCommand : MonoBehaviour
     [SerializeField] protected float _minElapsedTime;
     [SerializeField] protected float _maxElapsedTime;
 
-    protected UnityEvent _commandExecuted;
+    protected UnityEvent _commandExecuted = new UnityEvent();
 
     public abstract void Execute();
     public abstract bool CanExecute();
 
-    public void StartNewTimer(){ StartCoroutine(NewTimer()); }
+
+    public void StartNewTimer() { StartCoroutine(NewTimer()); }
 
     public IEnumerator NewTimer()
     {

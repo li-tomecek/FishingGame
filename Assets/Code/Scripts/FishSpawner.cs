@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FishSpawner : TimedCommand
@@ -23,7 +24,8 @@ public class FishSpawner : TimedCommand
     public override void Execute()
     {
         //Spawn new fish
-        Fish fish = _fishPool.GetActivePooledObject().GetComponent<Fish>();
-        fish.gameObject.transform.position = transform.position;
+        Fish fish = _fishPool.GetActivePooledObject()?.GetComponent<Fish>();
+        if(fish)
+            fish.gameObject.transform.position = transform.position;
     }
 }
