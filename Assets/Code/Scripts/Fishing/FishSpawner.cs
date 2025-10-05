@@ -11,21 +11,20 @@ public class FishSpawner : TimedCommand
     void Start()
     {
         _fishPool = new ObjectPool(_fishPrefab, _amountToPool, this.gameObject);
-        StartCommandCycle();
+        _automaticLoop = true;   //keep starting new spawn timers once one has spawned (probably temp)
+        StartNewTimer();
     }
 
-
-    public override bool CanExecute()
-    {
-        //If the player is not currently reeling in another fish
-        return true;    //TEMP
-    }
-
-    public override void Execute()
+    protected override void Execute()
     {
         //Spawn new fish
         Fish fish = _fishPool.GetActivePooledObject()?.GetComponent<Fish>();
         if(fish)
             fish.gameObject.transform.position = transform.position;
+    }
+
+    protected override void TryStartNewTimer()
+    {
+        throw new System.NotImplementedException();
     }
 }

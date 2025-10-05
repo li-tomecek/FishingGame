@@ -1,11 +1,10 @@
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BlinkController : TimedCommand
 {
     [Header("Eyelid")]
-    [SerializeField] GameObject _eyelid;
-    //private float _verticalTranslation;
+    [SerializeField] List<Eyelid> _eyelids;
 
     [Header("Blink Timing")]
     [SerializeField] float _minStartElaspedTime;
@@ -14,24 +13,41 @@ public class BlinkController : TimedCommand
     [SerializeField] float _maxEndElaspedTime;
     [SerializeField] float _minblinkDuration, _maxBlinkDuration;
     private float _blinkDuration;
-
-    void Start()
+    private float _eyelidsReady;
+ 
+    void OnEnable()
     {
         _minElapsedTime = _minStartElaspedTime;
         _maxElapsedTime = _maxStartElaspedTime;
-        StartCommandCycle();
+
+        foreach (var lid in _eyelids)
+            lid.BlinkComplete.AddListener(TryStartNewTimer);
+
+        StartNewTimer();
     }
 
-    public override bool CanExecute()
+    void OnDisable()
     {
-        return true;    //Don't think there are any conditions on this yet
+        foreach (var lid in _eyelids)
+            lid.BlinkComplete.RemoveListener(TryStartNewTimer);
     }
 
-    public override void Execute()
+    protected override void Execute()
     {
         //Blink
         SetTimings();
-        Blink();
+        foreach (var lid in _eyelids)
+            lid.Blink(_blinkDuration);
+    }
+
+    protected override void TryStartNewTimer()
+    {
+        _eyelidsReady++;
+        if (_eyelidsReady == _eyelids.Count)
+        {
+            StartNewTimer();
+            _eyelidsReady = 0;
+        }
     }
 
     private void SetTimings()
@@ -54,12 +70,5 @@ public class BlinkController : TimedCommand
         //update for next blink
         _minElapsedTime = Mathf.Lerp(_minStartElaspedTime, _minEndElaspedTime, TimeTracker.Instance.GetCurrentNormalizedTime());    //blinking can become more frequent as the doy progresses
         _maxElapsedTime = Mathf.Lerp(_maxStartElaspedTime, _maxEndElaspedTime, TimeTracker.Instance.GetCurrentNormalizedTime());
-    }
-
-    private void Blink()
-    {
-        //bring the lid down
-        //hold the lid
-        //bring the lid back up
     }
 }
