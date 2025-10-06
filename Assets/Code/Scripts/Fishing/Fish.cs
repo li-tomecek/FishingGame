@@ -18,15 +18,15 @@ public class Fish : MonoBehaviour
 
     [Header("Catching the Fish")]
     [SerializeField] float _timeToCatch = 5f;           // How long it takes to catch the fish           
-    [SerializeField] float _timerRegenRate = 0.2f;           // Regen rate of the catch timer (percent of max time regen over 1 second)          
+    [SerializeField] float _timerRegenRate = 0.2f;      // Regen rate of the catch timer (percent of max time regen over 1 second)          
     private float _catchTimer;
-    public UnityEvent<Fish> FishCaught = new UnityEvent<Fish>();
 
     [Header("Swimming")]
     [SerializeField] float _swimSpeed = 10f;
 
     private bool _hooked, _timerPaused;
     public float PullStrength => _pullStrength;
+    public int Value => _value;
 
     public void Start()
     {
@@ -89,14 +89,13 @@ public class Fish : MonoBehaviour
         HUDManager.Instance.SetCatchBarActive(false);
         gameObject.SetActive(false);    //to send fish back to object pool
 
-        FishCaught.RemoveAllListeners();    //reset values that may need to be reset (since we are using an object pool)
-        Start();
+        Start();    //Reset required values (because this object is pooled and will reappear)
     }
 
     public void Catch()
     {
         Debug.Log("FISH CAUGHT");
-        FishCaught.Invoke(this);
+        FishingManager.Instance.OnFishCaught.Invoke(this);
         Release();  //temp
     }
 

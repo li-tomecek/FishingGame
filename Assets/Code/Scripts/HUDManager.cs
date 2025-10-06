@@ -4,16 +4,19 @@ using UnityEngine.UI;
 
 public class HUDManager : Singleton<HUDManager>
 {
-    [SerializeField] TextMeshProUGUI _dayStateText, _timerText;
+    [SerializeField] TextMeshProUGUI _dayStateText, _timerText, _scoreText;
     [SerializeField] Slider _catchProgressBar;
 
     void Start()
     {
         TimeTracker.Instance.DaytimeStateChanged.AddListener(UpdateDayState);
         UpdateDayState(TimeTracker.Instance.DaytimeState);
+        FishingManager.Instance.OnScoreChange.AddListener(UpdateScore);
     }
 
-    void Update()
+    // --- DAY CYCLE ---
+    // -----------------
+    void Update()   //TEMP
     {
         _timerText.text = $"{TimeTracker.Instance.GetCurrentTime():0} / {TimeTracker.Instance.GetLengthOfDay():0}";
     }
@@ -23,6 +26,8 @@ public class HUDManager : Singleton<HUDManager>
         _dayStateText.SetText(state.ToString());
     }
 
+    // --- CATCH PROGRESS BAR ---
+    // --------------------------
     public void SetCatchProgress(float progress)
     {
         _catchProgressBar.value = progress;
@@ -31,5 +36,12 @@ public class HUDManager : Singleton<HUDManager>
     public void SetCatchBarActive(bool isActive)
     {
         _catchProgressBar.gameObject.SetActive(isActive);
+    }
+
+    // --- SCORE ---
+    // -------------
+    public void UpdateScore(int score)
+    {
+        _scoreText.text = $"Score: {score}";
     }
 }

@@ -19,6 +19,8 @@ public class FishingRod : MonoBehaviour, IButtonListener
     void Start()
     {
         FindFirstObjectByType<PlayerInputs>().RegisterListener(this);
+        FishingManager.Instance.OnFishCaught.AddListener((Fish) => { _hookedFish = null; });
+
         _rod.transform.RotateAround(_rotationOrigin.position, Vector3.forward, _targetAngle);
     }
 
@@ -74,8 +76,6 @@ public class FishingRod : MonoBehaviour, IButtonListener
             _fishInRange.Hook();
             _hookedFish = _fishInRange;
             _fishInRange = null;
-
-            _hookedFish.FishCaught.AddListener((Fish) => { _hookedFish = null; });
         }
 
     }
