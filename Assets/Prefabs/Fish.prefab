@@ -101,8 +101,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 754d6230d109b304daf67c75fb845548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pullStrength: 50
-  _timeToCatch: 3
+  _minPullStrength: 35
+  _maxPullStrength: 55
+  _timeToCatch: 5
   _value: 100
   _hookLayer:
     serializedVersion: 2

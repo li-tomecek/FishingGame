@@ -36,14 +36,14 @@ public class FishingRod : MonoBehaviour, IButtonListener
         if (_rod.transform.eulerAngles.z < _targetAngle - _acceptedRange || _rod.transform.eulerAngles.z > _targetAngle + _acceptedRange)
         {
             if (_isInRange) //Just left the accepted range
-                _hookedFish.ResetTimer();
+                _hookedFish.SetTimerPause(true);
 
             _isInRange = false;
         }
         else if (!_isInRange)   //Just re-entered the accepted range
         {
             _isInRange = true;
-            _hookedFish.StartTimer();
+            _hookedFish.SetTimerPause(false);
 
         }
     }
