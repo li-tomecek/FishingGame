@@ -135,6 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rod: {fileID: 710734226666848883}
+  _hook: {fileID: 6528255983022816895}
   _rotationOrigin: {fileID: 3273136947860646931}
   _maxAngle: 80
   _minAngle: 10

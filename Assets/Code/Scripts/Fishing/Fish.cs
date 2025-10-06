@@ -1,13 +1,17 @@
 using System;
 using System.Collections;
+using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using Vector3 = UnityEngine.Vector3;
 
-[RequireComponent(typeof(Collider2D))]
+//[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(ObjectShake))]
 public class Fish : MonoBehaviour
 {
     [SerializeField] int _value = 100;                  // Score
+    [SerializeField] Transform _biteOffset;
 
     [Header("Fish Pull Strength")]
     [SerializeField] float _minPullStrength = 35f;      // How strong the fish pulls on the line
@@ -18,17 +22,25 @@ public class Fish : MonoBehaviour
 
     [Header("Catching the Fish")]
     [SerializeField] float _timeToCatch = 5f;           // How long it takes to catch the fish           
-    [SerializeField] float _timerRegenRate = 0.2f;      // Regen rate of the catch timer (percent of max time regen over 1 second)          
+    [SerializeField] float _timerRegenRate = 0.2f;           // Regen rate of the catch timer (percent of max time regen over 1 second)          
     private float _catchTimer;
 
     [Header("Swimming")]
     [SerializeField] float _swimSpeed = 10f;
 
     private bool _hooked, _timerPaused;
+    private ObjectShake _shaker;
+
     public float PullStrength => _pullStrength;
     public int Value => _value;
 
     public void Start()
+    {
+        Reset();
+        _shaker = gameObject.GetComponent<ObjectShake>();
+    }
+
+    private void Reset()
     {
         _pullStrength = _maxPullStrength;
         _catchTimer = _timeToCatch;
@@ -76,11 +88,15 @@ public class Fish : MonoBehaviour
 
 
     #region Catching Fish     
-    public void Hook()      //should maybe have an event for this ni rod side
+    public void Hook(Vector3 hookPosition)
     {
+        transform.position = (hookPosition - _biteOffset.localPosition);
+
         _hooked = true;
         HUDManager.Instance.SetCatchBarActive(true);
+        _shaker.Shake();
         StartCoroutine(VaryPullStrength());
+        
     }
 
     public void Release()
@@ -89,7 +105,7 @@ public class Fish : MonoBehaviour
         HUDManager.Instance.SetCatchBarActive(false);
         gameObject.SetActive(false);    //to send fish back to object pool
 
-        Start();    //Reset required values (because this object is pooled and will reappear)
+        Reset();    //Reset required values (because this object is pooled and will re-appear)
     }
 
     public void Catch()

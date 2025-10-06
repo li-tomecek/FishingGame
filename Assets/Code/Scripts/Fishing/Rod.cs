@@ -4,6 +4,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
 {
     private bool _isInRange;
     [SerializeField] GameObject _rod;
+    [SerializeField] GameObject _hook;
 
     [SerializeField] Transform _rotationOrigin;
     [SerializeField] float _maxAngle, _minAngle, _targetAngle, _acceptedRange;
@@ -73,7 +74,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
         }
         else if (_fishInRange)          //if in waiting state, press button to hook valid fish
         {
-            _fishInRange.Hook();
+            _fishInRange.Hook(_hook.transform.position);
             _hookedFish = _fishInRange;
             _fishInRange = null;
         }
