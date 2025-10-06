@@ -15,7 +15,7 @@ public class Eyelid : MonoBehaviour
 
     public void Blink(float blinkDuration)
     {
-        Debug.Log($"playing with duration: {blinkDuration}");
+        //Debug.Log($"playing with duration: {blinkDuration}");
         StartCoroutine(BlinkRoutine(blinkDuration));
     }
 

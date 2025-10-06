@@ -11,7 +11,10 @@ public class FishingRod : MonoBehaviour, IButtonListener
     [Header("Button Controls")]
     [SerializeField] float _pullStrength = 15f;     //Rotation of rod per second
     private float _currentPullStrength;
-    private Fish _hookedFish;
+    private Fish _hookedFish, _fishInRange;
+
+    public Fish HookedFish => _hookedFish;
+    public Fish FishInRange => _fishInRange;
 
     void Start()
     {
@@ -48,9 +51,9 @@ public class FishingRod : MonoBehaviour, IButtonListener
         }
     }
 
-    public void HookFish(Fish fish)
+    public void SetFishInRange(Fish fish)
     {
-        _hookedFish = fish;
+        _fishInRange = fish;
     }
 
     #region Button actions
@@ -61,11 +64,19 @@ public class FishingRod : MonoBehaviour, IButtonListener
 
     public void ButtonPressed(ButtonInfo pressedInfo)
     {
-        //if in reeling state, press button to set pull strength
-        if (_hookedFish)
-            _currentPullStrength = _pullStrength;
 
-        //if in waiting state, press button to hook valid fish
+        if (_hookedFish)                //if in reeling state, press button to set pull strength
+        {
+            _currentPullStrength = _pullStrength;
+        }
+        else if (_fishInRange)          //if in waiting state, press button to hook valid fish
+        {
+            _fishInRange.Hook();
+            _hookedFish = _fishInRange;
+            _fishInRange = null;
+
+            _hookedFish.FishCaught.AddListener((Fish) => { _hookedFish = null; });
+        }
 
     }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Collider2D))]
 public class Fish : MonoBehaviour
@@ -18,14 +19,13 @@ public class Fish : MonoBehaviour
     [Header("Catching the Fish")]
     [SerializeField] float _timeToCatch = 5f;           // How long it takes to catch the fish           
     [SerializeField] float _timerRegenRate = 0.2f;           // Regen rate of the catch timer (percent of max time regen over 1 second)          
-    [SerializeField] LayerMask _hookLayer;
     private float _catchTimer;
+    public UnityEvent<Fish> FishCaught = new UnityEvent<Fish>();
 
     [Header("Swimming")]
     [SerializeField] float _swimSpeed = 10f;
 
     private bool _hooked, _timerPaused;
-    //private Coroutine _timerRoutine;
     public float PullStrength => _pullStrength;
 
     public void Start()
@@ -47,7 +47,7 @@ public class Fish : MonoBehaviour
             {
                 _catchTimer -= Time.fixedDeltaTime;
                 if (_catchTimer <= 0)
-                    CatchFish();
+                    Catch();
             }
             HUDManager.Instance.SetCatchProgress(1 - (_catchTimer / _timeToCatch));
         }
@@ -58,34 +58,51 @@ public class Fish : MonoBehaviour
     }
 
     #region Swimming
-    void OnTriggerEnter2D(Collider2D other)     //This should maybe be moved to the rod?
+    void OnTriggerEnter2D(Collider2D other)
     {
-        _hooked = true;
-        HUDManager.Instance.SetCatchBarActive(true);
         //TODO: play visual/audio cues here!
-        other.gameObject.GetComponentInParent<FishingRod>().HookFish(this);
-        StartCoroutine(VaryPullStrength());
+        FishingRod rod = other.gameObject.GetComponentInParent<FishingRod>();
+        if (rod.HookedFish == null && rod.FishInRange == null)
+            rod.SetFishInRange(this);
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        FishingRod rod = other.gameObject.GetComponentInParent<FishingRod>();
+        if (rod.FishInRange && rod.FishInRange == this)
+            rod.SetFishInRange(null);
     }
     #endregion
 
 
-    #region Catching Fish       //Note: none of this is currently being used anymore
-    public void SetTimerPause(bool paused)
+    #region Catching Fish     
+    public void Hook()      //should maybe have an event for this ni rod side
     {
-        _timerPaused = paused;
+        _hooked = true;
+        HUDManager.Instance.SetCatchBarActive(true);
+        StartCoroutine(VaryPullStrength());
     }
 
-    public void ReleaseFish()
+    public void Release()
     {
         _hooked = false;
         HUDManager.Instance.SetCatchBarActive(false);
         gameObject.SetActive(false);    //to send fish back to object pool
+
+        FishCaught.RemoveAllListeners();    //reset values that may need to be reset (since we are using an object pool)
+        Start();
     }
 
-    public void CatchFish()
+    public void Catch()
     {
         Debug.Log("FISH CAUGHT");
-        ReleaseFish();  //temp
+        FishCaught.Invoke(this);
+        Release();  //temp
+    }
+
+    public void SetTimerPause(bool paused)
+    {
+        _timerPaused = paused;
     }
 
     public IEnumerator VaryPullStrength()
@@ -95,7 +112,7 @@ public class Fish : MonoBehaviour
         {
             _pullStrength = UnityEngine.Random.Range(_minPullStrength, _maxPullStrength);
             waitTime = UnityEngine.Random.Range(MIN_PULL_DURATION, MAX_PULL_DURATION);
-            Debug.Log($"Pull Strenght is {_pullStrength} for {waitTime} seconds");
+            //Debug.Log($"Pull Strength is {_pullStrength} for {waitTime} seconds");
             yield return new WaitForSeconds(waitTime);
 
         } while (_hooked);
