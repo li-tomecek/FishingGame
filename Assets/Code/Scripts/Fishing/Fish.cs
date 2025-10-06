@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -7,39 +8,48 @@ public class Fish : MonoBehaviour
 {
     [SerializeField] int _value = 100;                  // Score
 
-    [Header("Catching the Fish")]
+    [Header("Fish Pull Strength")]
     [SerializeField] float _minPullStrength = 35f;      // How strong the fish pulls on the line
     [SerializeField] float _maxPullStrength = 55f;      // How strong the fish pulls on the line
-    [SerializeField] float _timeToCatch = 5f;           // How long it takes to catch the fish                 // For the score
-    [SerializeField] LayerMask _hookLayer;
     private float _pullStrength;
-
     const float MIN_PULL_DURATION = 1f;                 // pull strength varies, min mand max duration of each variance () 
     const float MAX_PULL_DURATION = 4f;
+
+    [Header("Catching the Fish")]
+    [SerializeField] float _timeToCatch = 5f;           // How long it takes to catch the fish           
+    [SerializeField] float _timerRegenRate = 0.2f;           // Regen rate of the catch timer (percent of max time regen over 1 second)          
+    [SerializeField] LayerMask _hookLayer;
+    private float _catchTimer;
 
     [Header("Swimming")]
     [SerializeField] float _swimSpeed = 10f;
 
     private bool _hooked, _timerPaused;
-    private Coroutine _timerRoutine;
+    //private Coroutine _timerRoutine;
     public float PullStrength => _pullStrength;
 
     public void Start()
     {
         _pullStrength = _maxPullStrength;
+        _catchTimer = _timeToCatch;
     }
 
-    #region Swimming
     void FixedUpdate()
     {
         if (_hooked)
         {
             if (_timerPaused)
-                return;
-
-            _timeToCatch -= Time.fixedDeltaTime;
-            if (_timeToCatch <= 0)
-                CatchFish();
+            {
+                _catchTimer += _timerRegenRate * _timeToCatch * Time.fixedDeltaTime;
+                _catchTimer = Math.Min(_catchTimer, _timeToCatch);
+            }
+            else
+            {
+                _catchTimer -= Time.fixedDeltaTime;
+                if (_catchTimer <= 0)
+                    CatchFish();
+            }
+            HUDManager.Instance.SetCatchProgress(1 - (_catchTimer / _timeToCatch));
         }
         else
         {
@@ -47,9 +57,11 @@ public class Fish : MonoBehaviour
         }     
     }
 
+    #region Swimming
     void OnTriggerEnter2D(Collider2D other)     //This should maybe be moved to the rod?
     {
         _hooked = true;
+        HUDManager.Instance.SetCatchBarActive(true);
         //TODO: play visual/audio cues here!
         other.gameObject.GetComponentInParent<FishingRod>().HookFish(this);
         StartCoroutine(VaryPullStrength());
@@ -66,6 +78,7 @@ public class Fish : MonoBehaviour
     public void ReleaseFish()
     {
         _hooked = false;
+        HUDManager.Instance.SetCatchBarActive(false);
         gameObject.SetActive(false);    //to send fish back to object pool
     }
 
@@ -80,8 +93,8 @@ public class Fish : MonoBehaviour
         float waitTime;
         do
         {
-            _pullStrength = Random.Range(_minPullStrength, _maxPullStrength);
-            waitTime = Random.Range(MIN_PULL_DURATION, MAX_PULL_DURATION);
+            _pullStrength = UnityEngine.Random.Range(_minPullStrength, _maxPullStrength);
+            waitTime = UnityEngine.Random.Range(MIN_PULL_DURATION, MAX_PULL_DURATION);
             Debug.Log($"Pull Strenght is {_pullStrength} for {waitTime} seconds");
             yield return new WaitForSeconds(waitTime);
 

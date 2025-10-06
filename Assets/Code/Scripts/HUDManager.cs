@@ -1,10 +1,12 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class HUDInfo : MonoBehaviour
+public class HUDManager : Singleton<HUDManager>
 {
-    [SerializeField] private TextMeshProUGUI _dayStateText, _timerText;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] TextMeshProUGUI _dayStateText, _timerText;
+    [SerializeField] Slider _catchProgressBar;
+
     void Start()
     {
         TimeTracker.Instance.DaytimeStateChanged.AddListener(UpdateDayState);
@@ -19,5 +21,15 @@ public class HUDInfo : MonoBehaviour
     void UpdateDayState(DaytimeState state)
     {
         _dayStateText.SetText(state.ToString());
+    }
+
+    public void SetCatchProgress(float progress)
+    {
+        _catchProgressBar.value = progress;
+    }
+
+    public void SetCatchBarActive(bool isActive)
+    {
+        _catchProgressBar.gameObject.SetActive(isActive);
     }
 }
