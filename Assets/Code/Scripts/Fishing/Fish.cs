@@ -94,7 +94,6 @@ public class Fish : MonoBehaviour
 
         _hooked = true;
         HUDManager.Instance.SetCatchBarActive(true);
-        _shaker.Shake();
         StartCoroutine(VaryPullStrength());
         
     }
@@ -127,6 +126,10 @@ public class Fish : MonoBehaviour
         {
             _pullStrength = UnityEngine.Random.Range(_minPullStrength, _maxPullStrength);
             waitTime = UnityEngine.Random.Range(MIN_PULL_DURATION, MAX_PULL_DURATION);
+
+            _shaker.StopShake();    //just in case
+            _shaker.Shake(waitTime, ((_pullStrength-_minPullStrength)/(_maxPullStrength-_minPullStrength)));
+
             //Debug.Log($"Pull Strength is {_pullStrength} for {waitTime} seconds");
             yield return new WaitForSeconds(waitTime);
 
