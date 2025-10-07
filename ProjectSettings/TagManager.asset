@@ -11,8 +11,8 @@ TagManager:
   - 
   - Water
   - UI
-  - Hook
-  - Fish
+  - 
+  - 
   - 
   - 
   - 
@@ -40,27 +40,6 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: Eyelids
-    uniqueID: 609148547
-=======
-  - name: Background
-    uniqueID: 1878266449
-    locked: 0
-  - name: Back
-    uniqueID: 2293931633
-    locked: 0
-  - name: Middle
-    uniqueID: 3397244435
-    locked: 0
-  - name: Front
-    uniqueID: 3999174181
-    locked: 0
-  - name: Boat
-    uniqueID: 1677162869
-    locked: 0
-  - name: Player
-    uniqueID: 1050411797
     locked: 0
   m_RenderingLayers:
   - Default

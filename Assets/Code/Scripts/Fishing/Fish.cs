@@ -12,6 +12,7 @@ public class Fish : MonoBehaviour
 {
     [SerializeField] int _value = 100;                  // Score
     [SerializeField] Transform _biteOffset;
+    [SerializeField] float _swimSpeed = 10f;
 
     [Header("Fish Pull Strength")]
     [SerializeField] float _minPullStrength = 35f;      // How strong the fish pulls on the line
@@ -25,8 +26,9 @@ public class Fish : MonoBehaviour
     [SerializeField] float _timerRegenRate = 0.2f;           // Regen rate of the catch timer (percent of max time regen over 1 second)          
     private float _catchTimer;
 
-    [Header("Swimming")]
-    [SerializeField] float _swimSpeed = 10f;
+    [Header("Audio")]
+    [SerializeField] private SFX _inRangeSFX;
+    [SerializeField] private SFX _caughtSFX;
 
     private bool _hooked, _timerPaused;
     private ObjectShake _shaker;
@@ -74,8 +76,12 @@ public class Fish : MonoBehaviour
     {
         //TODO: play visual/audio cues here!
         FishingRod rod = other.gameObject.GetComponentInParent<FishingRod>();
-        if (rod.HookedFish == null && rod.FishInRange == null)
+
+        if (rod.HookedFish == null)
+        {
+            AudioManager.Instance.PlaySound(_inRangeSFX);
             rod.SetFishInRange(this);
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -110,6 +116,7 @@ public class Fish : MonoBehaviour
     public void Catch()
     {
         Debug.Log("FISH CAUGHT");
+        AudioManager.Instance.PlaySound(_caughtSFX);
         FishingManager.Instance.OnFishCaught.Invoke(this);
         Release();  //temp
     }
