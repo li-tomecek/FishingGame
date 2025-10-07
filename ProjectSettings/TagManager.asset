@@ -53,6 +53,9 @@ TagManager:
   - name: Fish
     uniqueID: 2616692939
     locked: 0
+  - name: UI
+    uniqueID: 1211737045
+    locked: 0
   - name: Eyelids (Top)
     uniqueID: 3976412295
     locked: 0
