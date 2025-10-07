@@ -41,5 +41,8 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Eyelids (Top)
+    uniqueID: 3976412295
+    locked: 0
   m_RenderingLayers:
   - Default

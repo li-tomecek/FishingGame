@@ -15,6 +15,9 @@ public class BlinkController : TimedCommand
     private float _blinkDuration;
     private float _eyelidsReady;
  
+    [Header("Audio")]
+    [SerializeField] List<SFX> _blinkSFX = new List<SFX>();
+
     void OnEnable()
     {
         _minElapsedTime = _minStartElaspedTime;
@@ -36,6 +39,7 @@ public class BlinkController : TimedCommand
     {
         //Blink
         SetTimings();
+        AudioManager.Instance.PlayRandomSound(_blinkSFX);
         foreach (var lid in _eyelids)
             lid.Blink(_blinkDuration);
     }
