@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using UnityEngine.Events;
 
 public class FishingManager : Singleton<FishingManager>
@@ -19,6 +20,7 @@ public class FishingManager : Singleton<FishingManager>
     }
     public void AddToScore(int toAdd)
     {
+        Debug.WriteLine("Adding to score??");
         _score += toAdd;
         OnScoreChange.Invoke(_score);
     }

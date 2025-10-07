@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
-using System.Numerics;
-using Unity.VisualScripting;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Events;
 using Vector3 = UnityEngine.Vector3;
 
 //[RequireComponent(typeof(Collider2D))]
@@ -115,10 +113,11 @@ public class Fish : MonoBehaviour
 
     public void Catch()
     {
-        Debug.Log("FISH CAUGHT");
+        _hooked = false;
         AudioManager.Instance.PlaySound(_caughtSFX);
         FishingManager.Instance.OnFishCaught.Invoke(this);
-        Release();  //temp
+
+        gameObject.transform.DOMove(HUDManager.Instance.GetScoreLocation(), 0.5f).OnComplete(Release);
     }
 
     public void SetTimerPause(bool paused)
