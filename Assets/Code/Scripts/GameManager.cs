@@ -6,6 +6,7 @@ public class FishingManager : Singleton<FishingManager>
     private int _score;
     public UnityEvent<int> OnScoreChange = new UnityEvent<int>();
     public UnityEvent<Fish> OnFishCaught = new UnityEvent<Fish>();  //This should be with the fish, but this way we dont have to keep adding and removing listeners
+    public UnityEvent<Fish> OnFishLost = new UnityEvent<Fish>();  //This should be with the fish, but this way we dont have to keep adding and removing listeners
 
     void Start()
     {

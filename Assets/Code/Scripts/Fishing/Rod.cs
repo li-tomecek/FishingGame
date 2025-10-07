@@ -5,6 +5,8 @@ public class FishingRod : MonoBehaviour, IButtonListener
     private bool _isInRange;
     [SerializeField] GameObject _rod;
     [SerializeField] GameObject _hook;
+
+    [Header("Fishing Controls")]
     [SerializeField] Transform _rotationOrigin;
     [SerializeField] float _maxAngle, _minAngle, _targetAngle, _acceptedRange;
 
@@ -25,6 +27,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
     {
         FindFirstObjectByType<PlayerInputs>().RegisterListener(this);
         FishingManager.Instance.OnFishCaught.AddListener((Fish) => { _hookedFish = null; _reelSource.Stop(); });
+        FishingManager.Instance.OnFishLost.AddListener((Fish) => { _hookedFish = null; _reelSource.Stop(); });
 
         _rod.transform.RotateAround(_rotationOrigin.position, Vector3.forward, _targetAngle);
     }

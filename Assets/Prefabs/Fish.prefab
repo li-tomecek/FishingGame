@@ -139,8 +139,8 @@ MonoBehaviour:
   _swimSpeed: 3
   _minPullStrength: 35
   _maxPullStrength: 55
-  _timeToCatch: 5
-  _timerRegenRate: 0.2
+  _timeToCatch: 3.5
+  _timerRegenRate: 0.3
   _inRangeSFX: {fileID: 11400000, guid: b88682882c8981b4c9d0971f478c1c39, type: 2}
   _caughtSFX: {fileID: 11400000, guid: e39900c9c6a0a20488a8264eca82ff51, type: 2}
 --- !u!61 &8637582965975830200
