@@ -44,4 +44,9 @@ public class HUDManager : Singleton<HUDManager>
     {
         _scoreText.text = $"Score: {score}";
     }
+
+    public Vector3 GetScoreLocation()
+    {
+        return _scoreText.transform.position;
+    }
 }

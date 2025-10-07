@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
-using System.Numerics;
-using Unity.VisualScripting;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Events;
 using Vector3 = UnityEngine.Vector3;
 
 //[RequireComponent(typeof(Collider2D))]
@@ -12,6 +10,7 @@ public class Fish : MonoBehaviour
 {
     [SerializeField] int _value = 100;                  // Score
     [SerializeField] Transform _biteOffset;
+    [SerializeField] float _swimSpeed = 10f;
 
     [Header("Fish Pull Strength")]
     [SerializeField] float _minPullStrength = 35f;      // How strong the fish pulls on the line
@@ -21,12 +20,13 @@ public class Fish : MonoBehaviour
     const float MAX_PULL_DURATION = 4f;
 
     [Header("Catching the Fish")]
-    [SerializeField] float _timeToCatch = 5f;           // How long it takes to catch the fish           
-    [SerializeField] float _timerRegenRate = 0.2f;           // Regen rate of the catch timer (percent of max time regen over 1 second)          
+    [SerializeField] float _timeToCatch = 3.5f;           // How long it takes to catch the fish from the starting point           
+    [SerializeField] float _timerRegenRate = 0.35f;     // Regen rate of the catch timer (percent of max time regen over 1 second)          
     private float _catchTimer;
 
-    [Header("Swimming")]
-    [SerializeField] float _swimSpeed = 10f;
+    [Header("Audio")]
+    [SerializeField] private SFX _inRangeSFX;
+    [SerializeField] private SFX _caughtSFX;
 
     private bool _hooked, _timerPaused;
     private ObjectShake _shaker;
@@ -53,7 +53,10 @@ public class Fish : MonoBehaviour
             if (_timerPaused)
             {
                 _catchTimer += _timerRegenRate * _timeToCatch * Time.fixedDeltaTime;
-                _catchTimer = Math.Min(_catchTimer, _timeToCatch);
+                _catchTimer = Math.Min(_catchTimer, _timeToCatch * 2f);
+
+                if (_catchTimer >= _timeToCatch * 2f)
+                    LoseFish();
             }
             else
             {
@@ -74,13 +77,18 @@ public class Fish : MonoBehaviour
     {
         //TODO: play visual/audio cues here!
         FishingRod rod = other.gameObject.GetComponentInParent<FishingRod>();
-        if (rod.HookedFish == null && rod.FishInRange == null)
+        if (rod == null) return;
+        if (rod.HookedFish == null)
+        {
+            AudioManager.Instance.PlaySound(_inRangeSFX);
             rod.SetFishInRange(this);
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
         FishingRod rod = other.gameObject.GetComponentInParent<FishingRod>();
+        if (rod == null) return;
         if (rod.FishInRange && rod.FishInRange == this)
             rod.SetFishInRange(null);
     }
@@ -109,9 +117,20 @@ public class Fish : MonoBehaviour
 
     public void Catch()
     {
-        Debug.Log("FISH CAUGHT");
+        _hooked = false;
+        AudioManager.Instance.PlaySound(_caughtSFX);
         FishingManager.Instance.OnFishCaught.Invoke(this);
-        Release();  //temp
+
+        gameObject.transform.DOMove(HUDManager.Instance.GetScoreLocation(), 0.5f).OnComplete(Release);
+    }
+
+    public void LoseFish()
+    {
+        _hooked = false;
+        //AudioManager.Instance.PlaySound(_caughtSFX);
+        FishingManager.Instance.OnFishLost.Invoke(this);
+        Debug.Log("Fish lost!");
+        Release();
     }
 
     public void SetTimerPause(bool paused)

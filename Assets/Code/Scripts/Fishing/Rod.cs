@@ -6,21 +6,28 @@ public class FishingRod : MonoBehaviour, IButtonListener
     [SerializeField] GameObject _rod;
     [SerializeField] GameObject _hook;
 
+    [Header("Fishing Controls")]
     [SerializeField] Transform _rotationOrigin;
     [SerializeField] float _maxAngle, _minAngle, _targetAngle, _acceptedRange;
 
     [Header("Button Controls")]
     [SerializeField] float _pullStrength = 15f;     //Rotation of rod per second
     private float _currentPullStrength;
-    private Fish _hookedFish, _fishInRange;
 
+    [Header("Audio")]
+    [SerializeField] SFX _reelSFX;
+    [SerializeField] float _pitchAdjustmentWithinTarget = 1.5f; 
+    private AudioSource _reelSource;
+
+    private Fish _hookedFish, _fishInRange;
     public Fish HookedFish => _hookedFish;
     public Fish FishInRange => _fishInRange;
 
     void Start()
     {
         FindFirstObjectByType<PlayerInputs>().RegisterListener(this);
-        FishingManager.Instance.OnFishCaught.AddListener((Fish) => { _hookedFish = null; });
+        FishingManager.Instance.OnFishCaught.AddListener((Fish) => { _hookedFish = null; _reelSource.Stop(); });
+        FishingManager.Instance.OnFishLost.AddListener((Fish) => { _hookedFish = null; _reelSource.Stop(); });
 
         _rod.transform.RotateAround(_rotationOrigin.position, Vector3.forward, _targetAngle);
     }
@@ -42,7 +49,10 @@ public class FishingRod : MonoBehaviour, IButtonListener
         if (_rod.transform.eulerAngles.z < _targetAngle - _acceptedRange || _rod.transform.eulerAngles.z > _targetAngle + _acceptedRange)
         {
             if (_isInRange) //Just left the accepted range
+            {
                 _hookedFish.SetTimerPause(true);
+                _reelSource.pitch = 1;
+            }
 
             _isInRange = false;
         }
@@ -50,7 +60,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
         {
             _isInRange = true;
             _hookedFish.SetTimerPause(false);
-
+            _reelSource.pitch = _pitchAdjustmentWithinTarget;
         }
     }
 
@@ -58,7 +68,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
     {
         _fishInRange = fish;
     }
-
+    
     #region Button actions
     public void ButtonHeld(ButtonInfo heldInfo)
     {
@@ -77,6 +87,8 @@ public class FishingRod : MonoBehaviour, IButtonListener
             _fishInRange.Hook(_hook.transform.position);
             _hookedFish = _fishInRange;
             _fishInRange = null;
+
+            _reelSource = AudioManager.Instance.PlayLoopingSound(_reelSFX);
         }
 
     }
