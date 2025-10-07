@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4713780893778241439
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 108295197767839951}
+  m_Layer: 7
+  m_Name: BiteOffset
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &108295197767839951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4713780893778241439}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.497, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8719130409823985001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5676286539144468332
 GameObject:
   m_ObjectHideFlags: 0
@@ -12,6 +43,7 @@ GameObject:
   - component: {fileID: 1450206232876383741}
   - component: {fileID: 6687041681591241759}
   - component: {fileID: 8637582965975830200}
+  - component: {fileID: 7495538544319177446}
   m_Layer: 7
   m_Name: Fish
   m_TagString: Untagged
@@ -28,10 +60,11 @@ Transform:
   m_GameObject: {fileID: 5676286539144468332}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.38, y: -1.72, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.9923651, y: 0.37064236, z: 0.47824824}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 108295197767839951}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1450206232876383741
@@ -101,12 +134,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 754d6230d109b304daf67c75fb845548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pullStrength: 50
-  _timeToCatch: 3
   _value: 100
-  _hookLayer:
-    serializedVersion: 2
-    m_Bits: 64
+  _biteOffset: {fileID: 108295197767839951}
+  _minPullStrength: 35
+  _maxPullStrength: 55
+  _timeToCatch: 5
+  _timerRegenRate: 0.2
   _swimSpeed: 3
 --- !u!61 &8637582965975830200
 BoxCollider2D:
@@ -154,3 +187,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.97315615, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &7495538544319177446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5676286539144468332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 137147f72194f894788759c39bf314e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultDuration: 1
+  _defaultStrength: 0.05
+  _defaultRandomness: 75
+  _defaultVibrato: 15
+  _minVibrato: 8
+  _maxVibrato: 25

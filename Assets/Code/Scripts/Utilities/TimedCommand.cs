@@ -7,10 +7,11 @@ public abstract class TimedCommand : MonoBehaviour
     [SerializeField] protected float _minElapsedTime;
     [SerializeField] protected float _maxElapsedTime;
 
-    protected UnityEvent _commandExecuted = new UnityEvent();
+    //protected UnityEvent _commandExecuted = new UnityEvent();
+    protected bool _automaticLoop = false;
 
-    public abstract void Execute();
-    public abstract bool CanExecute();
+    protected abstract void Execute();
+    protected abstract void TryStartNewTimer();
 
 
     public void StartNewTimer() { StartCoroutine(NewTimer()); }
@@ -20,26 +21,21 @@ public abstract class TimedCommand : MonoBehaviour
         float timer = Random.Range(_minElapsedTime, _maxElapsedTime);
         yield return new WaitForSeconds(timer);
 
-        if (CanExecute())
-        {
-            Execute();
-            _commandExecuted?.Invoke();
-        }
-        else
-        {
-            StopCommandCycle();
-        }
+        Execute();
+
+        if (_automaticLoop)
+            StartNewTimer();
     }
 
-    public void StartCommandCycle()
-    {
-        _commandExecuted.AddListener(StartNewTimer);
-        StartNewTimer();
-    }
+    // public void StartCommandCycle()
+    // {
+    //     _commandExecuted.AddListener(StartNewTimer);
+    //     StartNewTimer();
+    // }
 
-    public void StopCommandCycle()
-    {
-        StopAllCoroutines();
-        _commandExecuted.RemoveListener(StartNewTimer);
-    }
+    // public void StopCommandCycle()
+    // {
+    //     StopAllCoroutines();
+    //     _commandExecuted.RemoveListener(StartNewTimer);
+    // }
 }

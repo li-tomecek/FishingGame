@@ -4,6 +4,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
 {
     private bool _isInRange;
     [SerializeField] GameObject _rod;
+    [SerializeField] GameObject _hook;
 
     [SerializeField] Transform _rotationOrigin;
     [SerializeField] float _maxAngle, _minAngle, _targetAngle, _acceptedRange;
@@ -11,11 +12,16 @@ public class FishingRod : MonoBehaviour, IButtonListener
     [Header("Button Controls")]
     [SerializeField] float _pullStrength = 15f;     //Rotation of rod per second
     private float _currentPullStrength;
-    private Fish _hookedFish;
+    private Fish _hookedFish, _fishInRange;
+
+    public Fish HookedFish => _hookedFish;
+    public Fish FishInRange => _fishInRange;
 
     void Start()
     {
         FindFirstObjectByType<PlayerInputs>().RegisterListener(this);
+        FishingManager.Instance.OnFishCaught.AddListener((Fish) => { _hookedFish = null; });
+
         _rod.transform.RotateAround(_rotationOrigin.position, Vector3.forward, _targetAngle);
     }
 
@@ -36,21 +42,21 @@ public class FishingRod : MonoBehaviour, IButtonListener
         if (_rod.transform.eulerAngles.z < _targetAngle - _acceptedRange || _rod.transform.eulerAngles.z > _targetAngle + _acceptedRange)
         {
             if (_isInRange) //Just left the accepted range
-                _hookedFish.ResetTimer();
+                _hookedFish.SetTimerPause(true);
 
             _isInRange = false;
         }
         else if (!_isInRange)   //Just re-entered the accepted range
         {
             _isInRange = true;
-            _hookedFish.StartTimer();
+            _hookedFish.SetTimerPause(false);
 
         }
     }
 
-    public void HookFish(Fish fish)
+    public void SetFishInRange(Fish fish)
     {
-        _hookedFish = fish;
+        _fishInRange = fish;
     }
 
     #region Button actions
@@ -61,11 +67,17 @@ public class FishingRod : MonoBehaviour, IButtonListener
 
     public void ButtonPressed(ButtonInfo pressedInfo)
     {
-        //if in reeling state, press button to set pull strength
-        if (_hookedFish)
-            _currentPullStrength = _pullStrength;
 
-        //if in waiting state, press button to hook valid fish
+        if (_hookedFish)                //if in reeling state, press button to set pull strength
+        {
+            _currentPullStrength = _pullStrength;
+        }
+        else if (_fishInRange)          //if in waiting state, press button to hook valid fish
+        {
+            _fishInRange.Hook(_hook.transform.position);
+            _hookedFish = _fishInRange;
+            _fishInRange = null;
+        }
 
     }
 

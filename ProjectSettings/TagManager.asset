@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Eyelids
+    uniqueID: 609148547
+=======
   - name: Background
     uniqueID: 1878266449
     locked: 0
