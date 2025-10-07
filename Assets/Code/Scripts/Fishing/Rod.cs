@@ -3,7 +3,7 @@ using UnityEngine;
 public class FishingRod : MonoBehaviour, IButtonListener
 {
     private bool _isInRange;
-    [SerializeField] GameObject _rod;
+    [SerializeField] GameObject _arm;
     [SerializeField] GameObject _hook;
 
     [Header("Fishing Controls")]
@@ -29,7 +29,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
         FishingManager.Instance.OnFishCaught.AddListener((Fish) => { _hookedFish = null; _reelSource.Stop(); });
         FishingManager.Instance.OnFishLost.AddListener((Fish) => { _hookedFish = null; _reelSource.Stop(); });
 
-        _rod.transform.RotateAround(_rotationOrigin.position, Vector3.forward, _targetAngle);
+        _arm.transform.RotateAround(_rotationOrigin.position, Vector3.forward, _targetAngle);
     }
 
     public void FixedUpdate()
@@ -42,11 +42,11 @@ public class FishingRod : MonoBehaviour, IButtonListener
         if (_hookedFish == null) return;
 
         float deltaRotation = (_currentPullStrength - _hookedFish.PullStrength) * Time.fixedDeltaTime;
-        deltaRotation = Mathf.Clamp(deltaRotation, _minAngle - _rod.transform.eulerAngles.z, _maxAngle - _rod.transform.eulerAngles.z);
+        deltaRotation = Mathf.Clamp(deltaRotation, _minAngle - _arm.transform.eulerAngles.z, _maxAngle - _arm.transform.eulerAngles.z);
 
-        _rod.transform.RotateAround(_rotationOrigin.position, Vector3.forward, deltaRotation);
+        _arm.transform.RotateAround(_rotationOrigin.position, Vector3.forward, deltaRotation);
 
-        if (_rod.transform.eulerAngles.z < _targetAngle - _acceptedRange || _rod.transform.eulerAngles.z > _targetAngle + _acceptedRange)
+        if (_arm.transform.eulerAngles.z < _targetAngle - _acceptedRange || _arm.transform.eulerAngles.z > _targetAngle + _acceptedRange)
         {
             if (_isInRange) //Just left the accepted range
             {
