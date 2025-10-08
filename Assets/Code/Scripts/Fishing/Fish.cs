@@ -114,8 +114,8 @@ public class Fish : MonoBehaviour
     #region Catching Fish     
     public void Hook(Vector3 hookPosition)
     {
-        transform.position = (hookPosition - _biteOffset.localPosition);
-
+        transform.position = hookPosition - (_biteOffset.localPosition * transform.localScale.x);
+        
         _hooked = true;
         HUDManager.Instance.SetCatchBarActive(true);
         StartCoroutine(VaryPullStrength());

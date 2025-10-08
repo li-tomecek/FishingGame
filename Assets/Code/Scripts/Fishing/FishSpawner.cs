@@ -7,6 +7,7 @@ public class FishSpawner : TimedCommand
     [SerializeField] int _amountToPool = 5;
     [Range(0, 1)]
     [SerializeField] float _commonFishFrequency = 0.7f;
+    [SerializeField] float _spawnHeightVariance = 0.5f;
 
     private ObjectPool _commonFishPool;         //ideally there is one pool and we change sprites/size/values form config
     private ObjectPool _uncommonFishPool;
@@ -26,10 +27,13 @@ public class FishSpawner : TimedCommand
         Fish fish = (Random.Range(0f, 1f) <= _commonFishFrequency)
         ? _commonFishPool.GetActivePooledObject()?.GetComponent<Fish>() 
         : _uncommonFishPool.GetActivePooledObject()?.GetComponent<Fish>();
- 
+
+        Vector3 spawnPoint = transform.position;
+        spawnPoint.y += Random.Range(-_spawnHeightVariance, _spawnHeightVariance);
+
         if (fish)
         {
-            fish.gameObject.transform.position = transform.position;
+            fish.gameObject.transform.position = spawnPoint;
             if (TimeTracker.Instance.DaytimeState == DaytimeState.Night)
                 fish.SetNightSprite();
         }
