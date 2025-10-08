@@ -18,9 +18,11 @@ public class BlinkController : TimedCommand
     [SerializeField] float _minblinkDuration, _maxBlinkDuration;
     private float _blinkDuration;
     private float _eyelidsReady;
-    private bool _blinking, _eyesClosed;
+    private bool _eyesClosed;
+    private bool _canAutoBlink = true;
 
     public UnityEvent BothEyesClosed = new UnityEvent();
+    private UnityAction _announceEyesClosed;
 
     [Header("Audio")]
     [SerializeField] List<SFX> _blinkSFX = new List<SFX>();
@@ -30,6 +32,7 @@ public class BlinkController : TimedCommand
         if (Instance == null)       //Singleton
         {
             Instance = this;
+            _announceEyesClosed = () => BothEyesClosed?.Invoke();
         }
         else
         {
@@ -45,7 +48,6 @@ public class BlinkController : TimedCommand
         foreach (var lid in _eyelids)
         {
             lid.BlinkComplete.AddListener(TryStartNewTimer);
-            lid.BlinkStarted.AddListener(()=>{ _blinking = true; });
             lid.LidClosed.AddListener(()=>{ _eyesClosed = true; });
         }
         StartNewTimer();
@@ -72,12 +74,12 @@ public class BlinkController : TimedCommand
     protected void TryStartNewTimer()
     {
         _eyelidsReady++;
-        if (_eyelidsReady == _eyelids.Count && !_blinking)
+        if (_eyelidsReady == _eyelids.Count)
         {
-            _blinking = false;
             _eyesClosed = false;
             _eyelidsReady = 0;
-            StartNewTimer();
+            if(_canAutoBlink)
+                StartNewTimer();
         }
     }
 
@@ -105,28 +107,29 @@ public class BlinkController : TimedCommand
 
     public void ForceBlinkWhenReady(float duration)
     {
-        Debug.Log("trying to force a blink");
         StartCoroutine(WaitForForceBlink(duration));
     }
 
     public IEnumerator WaitForForceBlink(float duration)
     {
-
-        //WAIT FOR ANY ALMOSt FINISHED BLINK
-        while (_blinking && _eyesClosed)
+        _canAutoBlink = false;
+        //WAIT FOR ANY ALMOST FINISHED BLINK
+        while (_eyesClosed)
         {
             yield return 0;
         }
 
-        _eyelids[0].LidClosed.AddListener(() => { BothEyesClosed?.Invoke(); });
-        
+        _eyelids[0].LidClosed.AddListener(_announceEyesClosed);
+
         //FORCE A BLINK
         Debug.Log("forcing a blink");
         foreach (var lid in _eyelids)
             lid.Blink(duration);
         yield return new WaitForSeconds(duration);
 
-        yield return 0;
-        _eyelids[0].LidClosed.RemoveAllListeners();
+        _eyelids[0].LidClosed.RemoveListener(_announceEyesClosed);
+
+        _canAutoBlink = true;
+        StartNewTimer();
     }
 }
