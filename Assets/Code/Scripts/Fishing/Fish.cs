@@ -6,12 +6,15 @@ using Vector3 = UnityEngine.Vector3;
 
 //[RequireComponent(typeof(Collider2D))]
 [RequireComponent(typeof(ObjectShake))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class Fish : MonoBehaviour
 {
     #region Members and Properties
 
-    [SerializeField] int _value = 100;                  // Score
     [SerializeField] Transform _biteOffset;
+    [SerializeField] Sprite _daySprite, _nightSprite;
+
+    [SerializeField] int _value = 100;                  // Score
     [SerializeField] float _swimSpeed = 10f;
 
     [Header("Fish Pull Strength")]
@@ -64,7 +67,7 @@ public class Fish : MonoBehaviour
                 if (_catchTimer >= _timeToCatch * 2f)
                     EscapeHook();
             }
-            else                        //Catch nar fills
+            else                        //Catch bar fills
             {
                 _catchTimer -= Time.fixedDeltaTime;
                 if (_catchTimer <= 0)
@@ -78,13 +81,20 @@ public class Fish : MonoBehaviour
         }     
     }
 
+    public void SetNightSprite()
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = _nightSprite;
+    }
+
     #region Swimming
     void OnTriggerEnter2D(Collider2D other)
     {
         FishingRod rod = other.gameObject.GetComponentInParent<FishingRod>();
-        if (rod == null) return;
-
-        if (rod.HookedFish == null)
+        if (rod == null)    //hit the despawner
+        {
+            SendBackToPool();
+        }
+        else if (rod.HookedFish == null)    //hit the hook zone
         {
             AudioManager.Instance.PlaySound(_inRangeSFX);
             rod.SetFishInRange(this);
