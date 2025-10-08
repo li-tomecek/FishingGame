@@ -149,7 +149,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e9780d4de5cba4da3812f01e84294c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BlinkStarted:
+    m_PersistentCalls:
+      m_Calls: []
   BlinkComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  LidClosed:
     m_PersistentCalls:
       m_Calls: []
 --- !u!212 &44850728
@@ -251,8 +257,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 863322107}
   - {fileID: 813743408}
+  - {fileID: 863322107}
   m_Father: {fileID: 234788655}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &200708507
@@ -285,7 +291,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e9780d4de5cba4da3812f01e84294c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BlinkStarted:
+    m_PersistentCalls:
+      m_Calls: []
   BlinkComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  LidClosed:
     m_PersistentCalls:
       m_Calls: []
 --- !u!212 &200708509
@@ -367,6 +379,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 234788655}
+  - component: {fileID: 234788656}
   m_Layer: 0
   m_Name: Ocean and Sky
   m_TagString: Untagged
@@ -391,6 +404,20 @@ Transform:
   - {fileID: 1955981234}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &234788656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234788654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dd8665f6aa743f41ac81aecb8e1adab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _oceanDay: {fileID: 153594008}
+  _oceanNight: {fileID: 1955981233}
 --- !u!1 &311671868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1642,6 +1669,9 @@ MonoBehaviour:
   _maxEndElaspedTime: 20
   _minblinkDuration: 1
   _maxBlinkDuration: 7
+  BothEyesClosed:
+    m_PersistentCalls:
+      m_Calls: []
   _blinkSFX:
   - {fileID: 11400000, guid: 73ee4f2c7105b6e4c842c03dfcf37c0c, type: 2}
   - {fileID: 11400000, guid: ae0e23b034ea96f41be22d10fc9d34b4, type: 2}
@@ -2337,7 +2367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startColor: {r: 0.69411767, g: 0.8196079, b: 0.95294124, a: 0}
-  _endColor: {r: 0.1254902, g: 0.18431373, b: 0.32156864, a: 0}
+  _endColor: {r: 0.08732645, g: 0.123392664, b: 0.20754719, a: 0}
 --- !u!1 &1734636059
 GameObject:
   m_ObjectHideFlags: 0
@@ -2964,7 +2994,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1955981234
 Transform:
   m_ObjectHideFlags: 0
@@ -2978,8 +3008,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1444184566}
   - {fileID: 1447222611}
+  - {fileID: 1444184566}
   m_Father: {fileID: 234788655}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2086729065

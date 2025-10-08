@@ -1,8 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BlinkController : TimedCommand
 {
+    public static BlinkController Instance;
+
     [Header("Eyelid")]
     [SerializeField] List<Eyelid> _eyelids;
 
@@ -14,9 +18,24 @@ public class BlinkController : TimedCommand
     [SerializeField] float _minblinkDuration, _maxBlinkDuration;
     private float _blinkDuration;
     private float _eyelidsReady;
- 
+    private bool _blinking, _eyesClosed;
+
+    public UnityEvent BothEyesClosed = new UnityEvent();
+
     [Header("Audio")]
     [SerializeField] List<SFX> _blinkSFX = new List<SFX>();
+
+    void Awake()
+    {
+        if (Instance == null)       //Singleton
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void OnEnable()
     {
@@ -24,8 +43,11 @@ public class BlinkController : TimedCommand
         _maxElapsedTime = _maxStartElaspedTime;
 
         foreach (var lid in _eyelids)
+        {
             lid.BlinkComplete.AddListener(TryStartNewTimer);
-
+            lid.BlinkStarted.AddListener(()=>{ _blinking = true; });
+            lid.LidClosed.AddListener(()=>{ _eyesClosed = true; });
+        }
         StartNewTimer();
     }
 
@@ -50,10 +72,12 @@ public class BlinkController : TimedCommand
     protected void TryStartNewTimer()
     {
         _eyelidsReady++;
-        if (_eyelidsReady == _eyelids.Count)
+        if (_eyelidsReady == _eyelids.Count && !_blinking)
         {
-            StartNewTimer();
+            _blinking = false;
+            _eyesClosed = false;
             _eyelidsReady = 0;
+            StartNewTimer();
         }
     }
 
@@ -77,5 +101,32 @@ public class BlinkController : TimedCommand
         //update for next blink
         _minElapsedTime = Mathf.Lerp(_minStartElaspedTime, _minEndElaspedTime, TimeTracker.Instance.GetCurrentNormalizedTime());    //blinking can become more frequent as the doy progresses
         _maxElapsedTime = Mathf.Lerp(_maxStartElaspedTime, _maxEndElaspedTime, TimeTracker.Instance.GetCurrentNormalizedTime());
+    }
+
+    public void ForceBlinkWhenReady(float duration)
+    {
+        Debug.Log("trying to force a blink");
+        StartCoroutine(WaitForForceBlink(duration));
+    }
+
+    public IEnumerator WaitForForceBlink(float duration)
+    {
+
+        //WAIT FOR ANY ALMOSt FINISHED BLINK
+        while (_blinking && _eyesClosed)
+        {
+            yield return 0;
+        }
+
+        _eyelids[0].LidClosed.AddListener(() => { BothEyesClosed?.Invoke(); });
+        
+        //FORCE A BLINK
+        Debug.Log("forcing a blink");
+        foreach (var lid in _eyelids)
+            lid.Blink(duration);
+        yield return new WaitForSeconds(duration);
+
+        yield return 0;
+        _eyelids[0].LidClosed.RemoveAllListeners();
     }
 }
