@@ -29,7 +29,7 @@ public class Fish : MonoBehaviour
     [SerializeField] float _timerRegenRate = 0.35f;     // Regen rate of the catch timer (percent of max time regen over 1 second)          
     private float _catchTimer;
     private const float ESCAPE_SPEED = 0.5f;
-    private readonly Vector3 ESCAPE_DIRECTION = new Vector3(-10, 0, 0);     //can't make a vector const
+    private readonly Vector3 ESCAPE_DIRECTION = new Vector3(-12, 0, 0);     //can't make a vector const
 
     [Header("Audio")]
     [SerializeField] private SFX _inRangeSFX;

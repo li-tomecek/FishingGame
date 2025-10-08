@@ -27,10 +27,17 @@ public class FishingRod : MonoBehaviour, IButtonListener
     void Start()
     {
         FindFirstObjectByType<PlayerInputs>().RegisterListener(this);
-        FishingManager.Instance.OnFishCaught.AddListener((Fish) => { _hookedFish = null; _reelSource.Stop(); });
-        FishingManager.Instance.OnFishLost.AddListener((Fish) => { _hookedFish = null; _reelSource.Stop(); });
+        FishingManager.Instance.OnFishCaught.AddListener((Fish) => { ResetRod(); });
+        FishingManager.Instance.OnFishLost.AddListener((Fish) => { ResetRod(); });
 
-        _arm.transform.RotateAround(_rotationOrigin.position, Vector3.forward, _targetAngle);
+        _arm.transform.RotateAround(_rotationOrigin.position, Vector3.forward, (_targetAngle - _arm.transform.eulerAngles.z));
+    }
+
+    private void ResetRod()
+    {
+        _hookedFish = null;
+        _reelSource?.Stop();
+        _arm.transform.RotateAround(_rotationOrigin.position, Vector3.forward, (_targetAngle - _arm.transform.eulerAngles.z));
     }
 
     public void FixedUpdate()
