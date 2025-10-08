@@ -39,12 +39,15 @@ public class BlinkController : TimedCommand
     {
         //Blink
         SetTimings();
-        AudioManager.Instance.PlayRandomSound(_blinkSFX);
+
+        if (TimeTracker.Instance.DaytimeState != DaytimeState.Morning)  //don't yawn in the morning.
+            AudioManager.Instance.PlayRandomSound(_blinkSFX);
+
         foreach (var lid in _eyelids)
             lid.Blink(_blinkDuration);
     }
 
-    protected override void TryStartNewTimer()
+    protected void TryStartNewTimer()
     {
         _eyelidsReady++;
         if (_eyelidsReady == _eyelids.Count)
@@ -63,11 +66,11 @@ public class BlinkController : TimedCommand
                 break;
 
             case DaytimeState.Midday:
-                _blinkDuration = Random.Range(_minblinkDuration, (_maxBlinkDuration * 2) / 3f);
+                _blinkDuration = Random.Range(_minblinkDuration, (_maxBlinkDuration * 2) / 3f); //min -> 2/3 of max
                 break;
 
             case DaytimeState.Night:
-                _blinkDuration = Random.Range(_maxBlinkDuration / 3f, _maxBlinkDuration);
+                _blinkDuration = Random.Range(_maxBlinkDuration / 3f, _maxBlinkDuration);       //1/3 max -> max
                 break;
         }
 

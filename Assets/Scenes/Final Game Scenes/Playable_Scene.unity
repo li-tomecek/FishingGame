@@ -1051,7 +1051,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 4.6945543, y: 0, z: -89.120804, w: -5.929722}
+  m_margin: {x: -9.405872, y: 0, z: -76.587326, w: -5.929722}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1243,7 +1243,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -288, y: 0}
+  m_AnchoredPosition: {x: -288, y: -8}
   m_SizeDelta: {x: 285.6211, y: 90.4302}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &936342994
@@ -3059,6 +3059,14 @@ PrefabInstance:
     - target: {fileID: 1435835350528306007, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
       propertyPath: _maxAngle
       value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 1435835350528306007, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
+      propertyPath: _defaultPitch
+      value: 0.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 1435835350528306007, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
+      propertyPath: _pitchAdjustmentWithinTarget
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 4446253802037855842, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
       propertyPath: m_LocalPosition.x

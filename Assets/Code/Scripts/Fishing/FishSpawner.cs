@@ -7,11 +7,13 @@ public class FishSpawner : TimedCommand
     [SerializeField] int _amountToPool = 5;
 
     private ObjectPool _fishPool;
+    private bool _useNightSprites;
 
     void Start()
     {
         _fishPool = new ObjectPool(_fishPrefab, _amountToPool, this.gameObject);
-        _automaticLoop = true;   //keep starting new spawn timers once one has spawned (probably temp)
+        _automaticLoop = true;   //keep starting new spawn timers once one has spawned
+
         StartNewTimer();
     }
 
@@ -21,10 +23,5 @@ public class FishSpawner : TimedCommand
         Fish fish = _fishPool.GetActivePooledObject()?.GetComponent<Fish>();
         if(fish)
             fish.gameObject.transform.position = transform.position;
-    }
-
-    protected override void TryStartNewTimer()
-    {
-        throw new System.NotImplementedException();
     }
 }

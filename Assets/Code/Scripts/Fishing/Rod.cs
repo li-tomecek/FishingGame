@@ -17,6 +17,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
     [Header("Audio")]
     [SerializeField] SFX _reelSFX;
     [SerializeField] float _pitchAdjustmentWithinTarget = 1.5f; 
+    [SerializeField] float _defaultPitch = 1f; 
     private AudioSource _reelSource;
 
     private Fish _hookedFish, _fishInRange;
@@ -51,7 +52,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
             if (_isInRange) //Just left the accepted range
             {
                 _hookedFish.SetTimerPause(true);
-                _reelSource.pitch = 1;
+                _reelSource.pitch = _defaultPitch;
             }
 
             _isInRange = false;
