@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 //Re-used from game jam. Luc Rancourt's scripts.
 
@@ -12,6 +13,8 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField] private AudioMixerGroup sfxMixer;
 
     [SerializeField] private SFX defaultMusic;
+    [SerializeField] private SFX _buttonClickSFX;
+
     private AudioSource _musicSource;
 
     private List<AudioSource> _soundEffectSources = new List<AudioSource>();
@@ -20,12 +23,14 @@ public class AudioManager : Singleton<AudioManager>
     private void Start()
     {
         LoadVolume();
-        if(defaultMusic != null)
+        if (defaultMusic != null)
             PlayMusic(defaultMusic);
+
+        LevelManager.Instance.OnSceneLoaded.AddListener(SetupButtonListeners);
     }
 
     #region Volume
-    private void LoadVolume()          
+    private void LoadVolume()
     {
         SetMixerVolume(AudioMixerKeys.MasterVolumeKey, PlayerPrefs.GetFloat(AudioMixerKeys.MasterVolumeKey));   //Player prefs to be changed in a settings menu
         SetMixerVolume(AudioMixerKeys.MusicVolumeKey, PlayerPrefs.GetFloat(AudioMixerKeys.MusicVolumeKey));
@@ -95,5 +100,15 @@ public class AudioManager : Singleton<AudioManager>
         newAudioSource.outputAudioMixerGroup = sfxMixer;
         _soundEffectSources.Add(newAudioSource);
         return newAudioSource;
+    }
+
+    private void SetupButtonListeners()
+    {
+        Button[] buttons = FindObjectsByType<Button>(FindObjectsSortMode.None);
+
+        foreach (Button btn in buttons)
+        {
+            btn.onClick.AddListener(() => PlaySound(_buttonClickSFX));
+        }
     }
 }

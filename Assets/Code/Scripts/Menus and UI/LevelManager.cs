@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
@@ -8,9 +9,12 @@ public class LevelManager : Singleton<LevelManager>//, ISaveable
 {
     #region
 
-    private const string PERSISTENT_SCENE_NAME = "PersistentScene";
-    private const int PLAYABLE_LEVEL_INDEX = 2;
+    private const string PERSISTENT_SCENE_NAME = "Persistent_Scene";
     private const int MAIN_MENU_SCENE_INDEX = 1;
+    private const int PLAYABLE_LEVEL_INDEX = 2;
+    private const int RESULTS_SCENE_INDEX = 3;
+
+    public UnityEvent OnSceneLoaded = new UnityEvent();
 
     #endregion
 
@@ -25,6 +29,7 @@ public class LevelManager : Singleton<LevelManager>//, ISaveable
     private void SetActiveScene(Scene scene, LoadSceneMode mode)
     {
         SceneManager.SetActiveScene(scene);    //so the persistent scene is not the one being unloaded
+        OnSceneLoaded?.Invoke();
     }
 
     public void LoadLevel(int buildIndex)
@@ -35,6 +40,9 @@ public class LevelManager : Singleton<LevelManager>//, ISaveable
         SceneManager.LoadScene(buildIndex, LoadSceneMode.Additive);
     }
 
+
+    // ---- Hard-Coded Scenes ---- 
+    // ---------------------------
     public void LoadMainMenu()
     {
         LoadLevel(MAIN_MENU_SCENE_INDEX);
@@ -44,5 +52,10 @@ public class LevelManager : Singleton<LevelManager>//, ISaveable
     {
         LoadLevel(PLAYABLE_LEVEL_INDEX);
     }
+
+    // public void LoadResultsScene()
+    // {
+    //     LoadLevel(RESULTS_SCENE_INDEX);
+    // }
     #endregion
 }

@@ -9,6 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Example/OneButtonScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
+    path: Assets/Scenes/Final Game Scenes/Persistent_Scene.unity
+    guid: b42f4a0fc9f56b848b3d73723719efdd
+  - enabled: 1
+    path: Assets/Scenes/Final Game Scenes/MainMenu_Scene.unity
+    guid: 7109ebf1f8cd89944bdf5a47f9f835d5
+  - enabled: 1
     path: Assets/Scenes/Final Game Scenes/Playable_Scene.unity
     guid: fd96c72f17585614db1927eef456ec56
   m_configObjects:
