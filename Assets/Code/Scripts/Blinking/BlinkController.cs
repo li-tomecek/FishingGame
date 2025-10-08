@@ -122,7 +122,6 @@ public class BlinkController : TimedCommand
         _eyelids[0].LidClosed.AddListener(_announceEyesClosed);
 
         //FORCE A BLINK
-        Debug.Log("forcing a blink");
         foreach (var lid in _eyelids)
             lid.Blink(duration);
         yield return new WaitForSeconds(duration);
