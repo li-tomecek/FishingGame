@@ -530,13 +530,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bce53ad2f0b37a04885c35d322bb3447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minElapsedTime: 1
-  _maxElapsedTime: 9
+  _minElapsedTime: 3
+  _maxElapsedTime: 10
   _commonFishPrefab: {fileID: 5676286539144468332, guid: 1f661ad8774ec4e48a423113d0733ef4, type: 3}
   _uncommonFishPrefab: {fileID: 5676286539144468332, guid: b0d7ec7b274966947ac71812689d2f8d, type: 3}
   _amountToPool: 5
   _commonFishFrequency: 0.7
-  _spawnHeightVariance: 0.5
+  _spawnHeightVariance: 0.6
 --- !u!4 &389846305
 Transform:
   m_ObjectHideFlags: 0
@@ -1647,12 +1647,12 @@ MonoBehaviour:
   _eyelids:
   - {fileID: 200708508}
   - {fileID: 44850727}
-  _minStartElaspedTime: 15
-  _maxStartElaspedTime: 30
-  _minEndElaspedTime: 5
-  _maxEndElaspedTime: 20
-  _minblinkDuration: 1
-  _maxBlinkDuration: 7
+  _minStartElaspedTime: 7
+  _maxStartElaspedTime: 18
+  _minEndElaspedTime: 6
+  _maxEndElaspedTime: 12
+  _minblinkDuration: 0.8
+  _maxBlinkDuration: 5
   BothEyesClosed:
     m_PersistentCalls:
       m_Calls: []
@@ -2496,8 +2496,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ae2016757bbb4d42a7fc70750629b11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lengthOfDay: 30
-  _finalBlinkDuration: 10
+  _lengthOfDay: 100
+  _finalBlinkDuration: 7
   _dayEndSFX: {fileID: 11400000, guid: 195b4fe6756104d4084efa0cc0bd07ad, type: 2}
   DaytimeStateChanged:
     m_PersistentCalls:
@@ -3243,6 +3243,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 311671870}
     m_Modifications:
+    - target: {fileID: 1435835350528306007, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
+      propertyPath: _defaultPitch
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1435835350528306007, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
+      propertyPath: _acceptedRange
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1435835350528306007, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
+      propertyPath: _pitchAdjustmentWithinTarget
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4446253802037855842, guid: 1cfe0af7393c35346b9a342f5897ce7b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.5

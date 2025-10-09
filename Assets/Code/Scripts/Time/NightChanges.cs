@@ -15,7 +15,7 @@ public class NightChanges : MonoBehaviour
         {
             //change ocean colors
             BlinkController.Instance.BothEyesClosed.AddListener(ChangeBackground);
-            BlinkController.Instance.ForceBlinkWhenReady(5);    //eyes closed for over a second
+            BlinkController.Instance.ForceBlinkWhenReady(3.5f);    //eyes closed for over a second
         }
     }
 

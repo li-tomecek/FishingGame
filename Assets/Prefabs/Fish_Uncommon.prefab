@@ -110,7 +110,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1678274357
   m_SortingLayer: 4
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -4574455806504136538, guid: 0f4135231a9644e4f950a197d96393f0, type: 3}
   m_Color: {r: 0.514151, g: 0.5557952, b: 1, a: 1}
   m_FlipX: 0
@@ -138,10 +138,10 @@ MonoBehaviour:
   _daySprite: {fileID: -4574455806504136538, guid: 0f4135231a9644e4f950a197d96393f0, type: 3}
   _nightSprite: {fileID: 4550858878444503821, guid: cb925b56cfe80494bae0a214dd2ce28c, type: 3}
   _value: 100
-  _swimSpeed: 5
-  _minPullStrength: 35
-  _maxPullStrength: 50
-  _timeToCatch: 3.5
+  _swimSpeed: 8
+  _minPullStrength: 25
+  _maxPullStrength: 55
+  _timeToCatch: 4
   _timerRegenRate: 0.3
   _inRangeSFX: {fileID: 11400000, guid: b88682882c8981b4c9d0971f478c1c39, type: 2}
   _caughtSFX: {fileID: 11400000, guid: e39900c9c6a0a20488a8264eca82ff51, type: 2}
@@ -208,5 +208,5 @@ MonoBehaviour:
   _defaultStrength: 0.05
   _defaultRandomness: 75
   _defaultVibrato: 15
-  _minVibrato: 8
-  _maxVibrato: 25
+  _minVibrato: 5
+  _maxVibrato: 35

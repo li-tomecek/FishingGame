@@ -110,7 +110,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1678274357
   m_SortingLayer: 4
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 1667041732787448114, guid: 9b7e1416c25d5f149bc2f2f511e2e17b, type: 3}
   m_Color: {r: 0.514151, g: 0.5557952, b: 1, a: 1}
   m_FlipX: 0
@@ -137,12 +137,12 @@ MonoBehaviour:
   _biteOffset: {fileID: 108295197767839951}
   _daySprite: {fileID: 1667041732787448114, guid: 9b7e1416c25d5f149bc2f2f511e2e17b, type: 3}
   _nightSprite: {fileID: 9213874239047490732, guid: a2fbef8304edecb4282ab0966521ce66, type: 3}
-  _value: 50
-  _swimSpeed: 3
-  _minPullStrength: 25
+  _value: 30
+  _swimSpeed: 4.5
+  _minPullStrength: 20
   _maxPullStrength: 40
-  _timeToCatch: 2.5
-  _timerRegenRate: 0.2
+  _timeToCatch: 3
+  _timerRegenRate: 0.25
   _inRangeSFX: {fileID: 11400000, guid: b88682882c8981b4c9d0971f478c1c39, type: 2}
   _caughtSFX: {fileID: 11400000, guid: e39900c9c6a0a20488a8264eca82ff51, type: 2}
   _escapedSFX: {fileID: 11400000, guid: 2f6672c46f70e744da24d8b314497df2, type: 2}
@@ -208,5 +208,5 @@ MonoBehaviour:
   _defaultStrength: 0.05
   _defaultRandomness: 75
   _defaultVibrato: 15
-  _minVibrato: 8
-  _maxVibrato: 25
+  _minVibrato: 5
+  _maxVibrato: 35

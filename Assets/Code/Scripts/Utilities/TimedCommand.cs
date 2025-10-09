@@ -9,16 +9,18 @@ public abstract class TimedCommand : MonoBehaviour
 
     //protected UnityEvent _commandExecuted = new UnityEvent();
     protected bool _automaticLoop = false;
+    protected Coroutine _currentTimer;
 
     protected abstract void Execute();
 
-    public void StartNewTimer() { StartCoroutine(NewTimer()); }
+    public void StartNewTimer() { _currentTimer = StartCoroutine(NewTimer()); }
 
-    public IEnumerator NewTimer()
+    public virtual IEnumerator NewTimer()
     {
         float timer = Random.Range(_minElapsedTime, _maxElapsedTime);
         yield return new WaitForSeconds(timer);
-
+        _currentTimer = null;
+        
         Execute();
 
         if (_automaticLoop)

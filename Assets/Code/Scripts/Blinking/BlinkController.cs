@@ -83,6 +83,18 @@ public class BlinkController : TimedCommand
         }
     }
 
+    public override IEnumerator NewTimer()      //was for debugging but leaving just in case
+    {
+        float timer = Random.Range(_minElapsedTime, _maxElapsedTime);
+        yield return new WaitForSeconds(timer);
+        _currentTimer = null;
+
+        Execute();
+
+        if (_automaticLoop)
+            StartNewTimer();
+    }
+
     private void SetTimings()
     {
         switch (TimeTracker.Instance.DaytimeState)      //As the day progresses, the average blink time increases
@@ -109,7 +121,6 @@ public class BlinkController : TimedCommand
     {
         StartCoroutine(WaitForForceBlink(duration, null));
     }
-
     
     public void ForceBlinkWhenReady(float duration, SFX customSoundEffect)
     {
@@ -119,8 +130,12 @@ public class BlinkController : TimedCommand
     public IEnumerator WaitForForceBlink(float duration, SFX customSoundEffect)
     {
         _canAutoBlink = false;
-        //WAIT FOR ANY ALMOST FINISHED BLINK
-        while (_eyesClosed)
+
+        if (_currentTimer != null)          //stop any current timers
+            StopCoroutine(_currentTimer);
+
+        
+        while (_eyesClosed)                 //WAIT FOR ANY ALMOST FINISHED BLINK
         {
             yield return 0;
         }
