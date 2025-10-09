@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ResultsMenu : MonoBehaviour
 {
-    [SerializeField] GameObject _menuObject;
+    [SerializeField] GameObject _menuObject, _showScoreObject;
     [SerializeField] TextMeshProUGUI _resultsTxt, _fishCaughtTxt, _scoreTxt;
     [SerializeField] Button _mainMenuBtn;
     [SerializeField] Vector3 _entryTranslation = new Vector3(-15, 0, 0);
@@ -35,6 +35,7 @@ public class ResultsMenu : MonoBehaviour
         if (!_menuObject.activeInHierarchy && _menuDelayTime <= 0)
         {
             StartResultsSequence();
+            _showScoreObject.SetActive(false);
         }
     }
 
@@ -58,6 +59,7 @@ public class ResultsMenu : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
+        Debug.Log("return to main menu");
         LevelManager.Instance.LoadMainMenu();
     }
 }
