@@ -1,8 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BlinkController : TimedCommand
 {
+    public static BlinkController Instance;
+
     [Header("Eyelid")]
     [SerializeField] List<Eyelid> _eyelids;
 
@@ -14,9 +18,27 @@ public class BlinkController : TimedCommand
     [SerializeField] float _minblinkDuration, _maxBlinkDuration;
     private float _blinkDuration;
     private float _eyelidsReady;
- 
+    private bool _eyesClosed;
+    private bool _canAutoBlink = true;
+
+    public UnityEvent BothEyesClosed = new UnityEvent();
+    private UnityAction _announceEyesClosed;
+
     [Header("Audio")]
     [SerializeField] List<SFX> _blinkSFX = new List<SFX>();
+
+    void Awake()
+    {
+        if (Instance == null)       //Singleton
+        {
+            Instance = this;
+            _announceEyesClosed = () => BothEyesClosed?.Invoke();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void OnEnable()
     {
@@ -24,8 +46,10 @@ public class BlinkController : TimedCommand
         _maxElapsedTime = _maxStartElaspedTime;
 
         foreach (var lid in _eyelids)
+        {
             lid.BlinkComplete.AddListener(TryStartNewTimer);
-
+            lid.LidClosed.AddListener(()=>{ _eyesClosed = true; });
+        }
         StartNewTimer();
     }
 
@@ -39,18 +63,23 @@ public class BlinkController : TimedCommand
     {
         //Blink
         SetTimings();
-        AudioManager.Instance.PlayRandomSound(_blinkSFX);
+
+        if (TimeTracker.Instance.DaytimeState != DaytimeState.Morning)  //don't yawn in the morning.
+            AudioManager.Instance.PlayRandomSound(_blinkSFX);
+
         foreach (var lid in _eyelids)
             lid.Blink(_blinkDuration);
     }
 
-    protected override void TryStartNewTimer()
+    protected void TryStartNewTimer()
     {
         _eyelidsReady++;
         if (_eyelidsReady == _eyelids.Count)
         {
-            StartNewTimer();
+            _eyesClosed = false;
             _eyelidsReady = 0;
+            if(_canAutoBlink)
+                StartNewTimer();
         }
     }
 
@@ -63,16 +92,43 @@ public class BlinkController : TimedCommand
                 break;
 
             case DaytimeState.Midday:
-                _blinkDuration = Random.Range(_minblinkDuration, (_maxBlinkDuration * 2) / 3f);
+                _blinkDuration = Random.Range(_minblinkDuration, (_maxBlinkDuration * 2) / 3f); //min -> 2/3 of max
                 break;
 
             case DaytimeState.Night:
-                _blinkDuration = Random.Range(_maxBlinkDuration / 3f, _maxBlinkDuration);
+                _blinkDuration = Random.Range(_maxBlinkDuration / 3f, _maxBlinkDuration);       //1/3 max -> max
                 break;
         }
 
         //update for next blink
         _minElapsedTime = Mathf.Lerp(_minStartElaspedTime, _minEndElaspedTime, TimeTracker.Instance.GetCurrentNormalizedTime());    //blinking can become more frequent as the doy progresses
         _maxElapsedTime = Mathf.Lerp(_maxStartElaspedTime, _maxEndElaspedTime, TimeTracker.Instance.GetCurrentNormalizedTime());
+    }
+
+    public void ForceBlinkWhenReady(float duration)
+    {
+        StartCoroutine(WaitForForceBlink(duration));
+    }
+
+    public IEnumerator WaitForForceBlink(float duration)
+    {
+        _canAutoBlink = false;
+        //WAIT FOR ANY ALMOST FINISHED BLINK
+        while (_eyesClosed)
+        {
+            yield return 0;
+        }
+
+        _eyelids[0].LidClosed.AddListener(_announceEyesClosed);
+
+        //FORCE A BLINK
+        foreach (var lid in _eyelids)
+            lid.Blink(duration);
+        yield return new WaitForSeconds(duration);
+
+        _eyelids[0].LidClosed.RemoveListener(_announceEyesClosed);
+
+        _canAutoBlink = true;
+        StartNewTimer();
     }
 }

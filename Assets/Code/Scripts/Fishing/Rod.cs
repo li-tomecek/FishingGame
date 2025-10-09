@@ -17,6 +17,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
     [Header("Audio")]
     [SerializeField] SFX _reelSFX;
     [SerializeField] float _pitchAdjustmentWithinTarget = 1.5f; 
+    [SerializeField] float _defaultPitch = 1f; 
     private AudioSource _reelSource;
 
     private Fish _hookedFish, _fishInRange;
@@ -26,10 +27,17 @@ public class FishingRod : MonoBehaviour, IButtonListener
     void Start()
     {
         FindFirstObjectByType<PlayerInputs>().RegisterListener(this);
-        FishingManager.Instance.OnFishCaught.AddListener((Fish) => { _hookedFish = null; _reelSource.Stop(); });
-        FishingManager.Instance.OnFishLost.AddListener((Fish) => { _hookedFish = null; _reelSource.Stop(); });
+        FishingManager.Instance.OnFishCaught.AddListener((Fish) => { ResetRod(); });
+        FishingManager.Instance.OnFishLost.AddListener((Fish) => { ResetRod(); });
 
-        _arm.transform.RotateAround(_rotationOrigin.position, Vector3.forward, _targetAngle);
+        _arm.transform.RotateAround(_rotationOrigin.position, Vector3.forward, (_targetAngle - _arm.transform.eulerAngles.z));
+    }
+
+    private void ResetRod()
+    {
+        _hookedFish = null;
+        _reelSource?.Stop();
+        _arm.transform.RotateAround(_rotationOrigin.position, Vector3.forward, (_targetAngle - _arm.transform.eulerAngles.z));
     }
 
     public void FixedUpdate()
@@ -51,7 +59,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
             if (_isInRange) //Just left the accepted range
             {
                 _hookedFish.SetTimerPause(true);
-                _reelSource.pitch = 1;
+                _reelSource.pitch = _defaultPitch;
             }
 
             _isInRange = false;

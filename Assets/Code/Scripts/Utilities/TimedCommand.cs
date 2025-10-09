@@ -11,8 +11,6 @@ public abstract class TimedCommand : MonoBehaviour
     protected bool _automaticLoop = false;
 
     protected abstract void Execute();
-    protected abstract void TryStartNewTimer();
-
 
     public void StartNewTimer() { StartCoroutine(NewTimer()); }
 

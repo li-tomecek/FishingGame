@@ -6,7 +6,9 @@ using UnityEngine.Events;
 public class Eyelid : MonoBehaviour
 {
     private float _startY;
+    
     public UnityEvent BlinkComplete = new UnityEvent();
+    public UnityEvent LidClosed = new UnityEvent();
 
     void Start()
     {
@@ -22,6 +24,7 @@ public class Eyelid : MonoBehaviour
     public IEnumerator BlinkRoutine(float blinkDuration)
     {
         yield return gameObject.transform.DOMoveY(0f, blinkDuration / 3f);
+        LidClosed?.Invoke();
         yield return new WaitForSeconds(blinkDuration / 3f);
         yield return gameObject.transform.DOMoveY(_startY, blinkDuration / 3f);
         BlinkComplete?.Invoke();

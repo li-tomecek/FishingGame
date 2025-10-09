@@ -3,28 +3,39 @@ using UnityEngine;
 
 public class FishSpawner : TimedCommand
 {
-    [SerializeField] GameObject _fishPrefab;
+    [SerializeField] GameObject _commonFishPrefab, _uncommonFishPrefab;
     [SerializeField] int _amountToPool = 5;
+    [Range(0, 1)]
+    [SerializeField] float _commonFishFrequency = 0.7f;
+    [SerializeField] float _spawnHeightVariance = 0.5f;
 
-    private ObjectPool _fishPool;
+    private ObjectPool _commonFishPool;         //ideally there is one pool and we change sprites/size/values form config
+    private ObjectPool _uncommonFishPool;
 
     void Start()
     {
-        _fishPool = new ObjectPool(_fishPrefab, _amountToPool, this.gameObject);
-        _automaticLoop = true;   //keep starting new spawn timers once one has spawned (probably temp)
+        _commonFishPool = new ObjectPool(_commonFishPrefab, _amountToPool, this.gameObject);
+        _uncommonFishPool = new ObjectPool(_uncommonFishPrefab, _amountToPool, this.gameObject);
+        _automaticLoop = true;   //keep starting new spawn timers once one has spawned
+
         StartNewTimer();
     }
 
     protected override void Execute()
     {
         //Spawn new fish
-        Fish fish = _fishPool.GetActivePooledObject()?.GetComponent<Fish>();
-        if(fish)
-            fish.gameObject.transform.position = transform.position;
-    }
+        Fish fish = (Random.Range(0f, 1f) <= _commonFishFrequency)
+        ? _commonFishPool.GetActivePooledObject()?.GetComponent<Fish>() 
+        : _uncommonFishPool.GetActivePooledObject()?.GetComponent<Fish>();
 
-    protected override void TryStartNewTimer()
-    {
-        throw new System.NotImplementedException();
-    }
+        Vector3 spawnPoint = transform.position;
+        spawnPoint.y += Random.Range(-_spawnHeightVariance, _spawnHeightVariance);
+
+        if (fish)
+        {
+            fish.gameObject.transform.position = spawnPoint;
+            if (TimeTracker.Instance.DaytimeState == DaytimeState.Night)
+                fish.SetNightSprite();
+        }
+      }
 }

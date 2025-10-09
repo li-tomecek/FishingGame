@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SFX_Reel
   m_EditorClassIdentifier: 
   <Clip>k__BackingField: {fileID: 8300000, guid: f21f5b1a4ee19484991b7434e98c8624, type: 3}
-  <Volume>k__BackingField: 0.35
+  <Volume>k__BackingField: 0.25
   <Pitch>k__BackingField: 1
