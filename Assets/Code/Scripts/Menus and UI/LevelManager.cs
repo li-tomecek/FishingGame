@@ -28,8 +28,9 @@ public class LevelManager : Singleton<LevelManager>//, ISaveable
     }
     private void SetActiveScene(Scene scene, LoadSceneMode mode)
     {
-        SceneManager.SetActiveScene(scene);    //so the persistent scene is not the one being unloaded
         OnSceneLoaded?.Invoke();
+        SceneManager.SetActiveScene(scene);    //so the persistent scene is not the one being unloaded
+        //OnSceneLoaded?.Invoke();
     }
 
     public void LoadLevel(int buildIndex)
@@ -46,7 +47,8 @@ public class LevelManager : Singleton<LevelManager>//, ISaveable
     public void LoadMainMenu()
     {
         LoadLevel(MAIN_MENU_SCENE_INDEX);
-        AudioManager.Instance.PlayDefaultMusic();
+        AudioManager.Instance.PlayDefaultMusic();   //these should be moved later
+        FishingManager.Instance.ResetValues();
     }
 
     public void LoadGameScene()

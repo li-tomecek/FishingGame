@@ -115,7 +115,6 @@ public class AudioManager : Singleton<AudioManager>
     private void SetupButtonListeners()
     {
         Button[] buttons = FindObjectsByType<Button>(FindObjectsSortMode.None);
-
         foreach (Button btn in buttons)
         {
             btn.onClick.AddListener(() => PlaySound(_buttonClickSFX));

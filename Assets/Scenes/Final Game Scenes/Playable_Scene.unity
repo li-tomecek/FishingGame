@@ -2564,7 +2564,6 @@ GameObject:
   - component: {fileID: 1759669713}
   - component: {fileID: 1759669712}
   - component: {fileID: 1759669711}
-  - component: {fileID: 1759669710}
   m_Layer: 0
   m_Name: '[Managers]'
   m_TagString: Untagged
@@ -2572,27 +2571,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1759669710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1759669709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce5dee1790859304ebc3013c5e28ed68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnScoreChange:
-    m_PersistentCalls:
-      m_Calls: []
-  OnFishCaught:
-    m_PersistentCalls:
-      m_Calls: []
-  OnFishLost:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1759669711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2606,6 +2584,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lengthOfDay: 30
+  _finalBlinkDuration: 10
   _dayEndSFX: {fileID: 11400000, guid: 195b4fe6756104d4084efa0cc0bd07ad, type: 2}
   DaytimeStateChanged:
     m_PersistentCalls:

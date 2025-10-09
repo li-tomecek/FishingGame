@@ -8,7 +8,7 @@ public class ResultsMenu : MonoBehaviour
     [SerializeField] GameObject _menuObject, _showScoreObject;
     [SerializeField] TextMeshProUGUI _resultsTxt, _fishCaughtTxt, _scoreTxt;
     [SerializeField] Button _mainMenuBtn;
-    [SerializeField] Vector3 _entryTranslation = new Vector3(-15, 0, 0);
+    [SerializeField] Vector3 _entryTranslation = new Vector3(-12, 0, 0);
     Vector3 _resultsStart, _fishStart, _scoreStart;
 
     [SerializeField] float _menuDelayTime = 24f;
@@ -22,11 +22,14 @@ public class ResultsMenu : MonoBehaviour
 
         _fishStart = _fishCaughtTxt.transform.position;
         _fishCaughtTxt.transform.Translate(-_entryTranslation);
+        _fishCaughtTxt.text = $"FISH CAUGHT: {FishingManager.Instance.GetFishCaught()}";
 
         _scoreStart = _scoreTxt.transform.position;
         _scoreTxt.transform.Translate(-_entryTranslation);
+        _scoreTxt.text = $"SCORE: {FishingManager.Instance.GetScore()}";
 
         _menuObject.SetActive(false);
+        
     }
 
     public void Update()
@@ -45,11 +48,11 @@ public class ResultsMenu : MonoBehaviour
 
         Sequence seq = DOTween.Sequence().Pause();
 
-        seq.Append(_resultsTxt.transform.DOMove(_resultsStart, 0.5f));
+        seq.Append(_resultsTxt.transform.DOMove(_resultsStart, 0.7f));
         seq.AppendInterval(0.1f);
-        seq.Append(_fishCaughtTxt.transform.DOMove(_fishStart, 0.5f));
+        seq.Append(_fishCaughtTxt.transform.DOMove(_fishStart, 0.7f));
         seq.AppendInterval(0.1f);
-        seq.Append(_scoreTxt.transform.DOMove(_scoreStart, 0.5f));
+        seq.Append(_scoreTxt.transform.DOMove(_scoreStart, 0.7f));
         seq.AppendInterval(0.1f);
 
         seq.OnComplete(() => _mainMenuBtn.gameObject.SetActive(true));

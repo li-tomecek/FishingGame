@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Xml.Serialization;
 using UnityEngine.Events;
 
 public class FishingManager : Singleton<FishingManager>
@@ -14,6 +15,12 @@ public class FishingManager : Singleton<FishingManager>
         OnFishCaught.AddListener((Fish fish) => { AddToScore(fish.Value); });
     }
 
+    public void ResetValues()
+    {
+        _score = 0;
+        _fishCaught = 0;
+    }
+    public int GetFishCaught() { return _fishCaught; }
     public int GetScore() { return _score; }
     public void SetScore(int score)
     {
