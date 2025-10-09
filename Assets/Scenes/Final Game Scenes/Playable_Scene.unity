@@ -2606,10 +2606,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lengthOfDay: 30
+  _dayEndSFX: {fileID: 11400000, guid: 195b4fe6756104d4084efa0cc0bd07ad, type: 2}
   DaytimeStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  DayComplete:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &1759669712

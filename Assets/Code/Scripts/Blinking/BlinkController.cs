@@ -48,7 +48,7 @@ public class BlinkController : TimedCommand
         foreach (var lid in _eyelids)
         {
             lid.BlinkComplete.AddListener(TryStartNewTimer);
-            lid.LidClosed.AddListener(()=>{ _eyesClosed = true; });
+            lid.LidClosed.AddListener(() => { _eyesClosed = true; });
         }
         StartNewTimer();
     }
@@ -107,10 +107,16 @@ public class BlinkController : TimedCommand
 
     public void ForceBlinkWhenReady(float duration)
     {
-        StartCoroutine(WaitForForceBlink(duration));
+        StartCoroutine(WaitForForceBlink(duration, null));
     }
 
-    public IEnumerator WaitForForceBlink(float duration)
+    
+    public void ForceBlinkWhenReady(float duration, SFX customSoundEffect)
+    {
+        StartCoroutine(WaitForForceBlink(duration, customSoundEffect));
+    }
+
+    public IEnumerator WaitForForceBlink(float duration, SFX customSoundEffect)
     {
         _canAutoBlink = false;
         //WAIT FOR ANY ALMOST FINISHED BLINK
@@ -121,12 +127,16 @@ public class BlinkController : TimedCommand
 
         _eyelids[0].LidClosed.AddListener(_announceEyesClosed);
 
+        if (customSoundEffect != null)
+            AudioManager.Instance.PlaySound(customSoundEffect);
+
         //FORCE A BLINK
         foreach (var lid in _eyelids)
             lid.Blink(duration);
         yield return new WaitForSeconds(duration);
 
         _eyelids[0].LidClosed.RemoveListener(_announceEyesClosed);
+        BothEyesClosed.RemoveAllListeners();
 
         _canAutoBlink = true;
         StartNewTimer();

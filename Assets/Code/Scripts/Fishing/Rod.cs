@@ -4,7 +4,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
 {
     private bool _isInRange;
     [SerializeField] GameObject _arm;
-    [SerializeField] GameObject _hook;
+    [SerializeField] Transform _hookTransform;
 
     [Header("Fishing Controls")]
     [SerializeField] Transform _rotationOrigin;
@@ -31,6 +31,11 @@ public class FishingRod : MonoBehaviour, IButtonListener
         FishingManager.Instance.OnFishLost.AddListener((Fish) => { ResetRod(); });
 
         _arm.transform.RotateAround(_rotationOrigin.position, Vector3.forward, (_targetAngle - _arm.transform.eulerAngles.z));
+    }
+
+    void OnDisable()
+    {
+        _reelSource?.Stop();
     }
 
     private void ResetRod()
@@ -92,7 +97,7 @@ public class FishingRod : MonoBehaviour, IButtonListener
         }
         else if (_fishInRange)          //if in waiting state, press button to hook valid fish
         {
-            _fishInRange.Hook(_hook.transform.position);
+            _fishInRange.Hook(_hookTransform.position);
             _hookedFish = _fishInRange;
             _fishInRange = null;
 

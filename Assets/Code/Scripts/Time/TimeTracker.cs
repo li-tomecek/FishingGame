@@ -1,16 +1,18 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class TimeTracker : Singleton<TimeTracker>
 {
     [SerializeField] float _lengthOfDay = 120;
+    [SerializeField] float _finalBlinkDuration = 10;
+    [SerializeField] SFX _dayEndSFX;
     private float _currentTime;
     private float _middayStartTime, _nightStartTime;
     private bool _dayComplete;
 
     public DaytimeState DaytimeState { get; private set; }
     public UnityEvent<DaytimeState> DaytimeStateChanged = new UnityEvent<DaytimeState>();
-    public UnityEvent DayComplete = new UnityEvent();
 
     void Start()
     {
@@ -26,9 +28,9 @@ public class TimeTracker : Singleton<TimeTracker>
 
         if (_currentTime >= _lengthOfDay)
         {
-            DayComplete?.Invoke();
             _dayComplete = true;
-            LevelManager.Instance.LoadResultsScene();
+            BlinkController.Instance.BothEyesClosed.AddListener(() => StartCoroutine(FinishDay()));
+            BlinkController.Instance.ForceBlinkWhenReady(_finalBlinkDuration, _dayEndSFX);
             return;
         }
 
@@ -42,6 +44,12 @@ public class TimeTracker : Singleton<TimeTracker>
             DaytimeState = DaytimeState.Night;
             DaytimeStateChanged?.Invoke(DaytimeState);
         }
+    }
+
+    public IEnumerator FinishDay()
+    {
+        yield return new WaitForSeconds(_finalBlinkDuration / 3);   //slight pause before scene changes
+        LevelManager.Instance.LoadResultsScene();
     }
 
     public float GetCurrentNormalizedTime()
