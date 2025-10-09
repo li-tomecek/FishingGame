@@ -46,6 +46,7 @@ public class LevelManager : Singleton<LevelManager>//, ISaveable
     public void LoadMainMenu()
     {
         LoadLevel(MAIN_MENU_SCENE_INDEX);
+        AudioManager.Instance.PlayDefaultMusic();
     }
 
     public void LoadGameScene()
@@ -53,9 +54,11 @@ public class LevelManager : Singleton<LevelManager>//, ISaveable
         LoadLevel(PLAYABLE_LEVEL_INDEX);
     }
 
-    // public void LoadResultsScene()
-    // {
-    //     LoadLevel(RESULTS_SCENE_INDEX);
-    // }
+    public void LoadResultsScene()
+    {
+        LoadLevel(RESULTS_SCENE_INDEX);
+        AudioManager.Instance.StopMusic();
+        
+    }
     #endregion
 }

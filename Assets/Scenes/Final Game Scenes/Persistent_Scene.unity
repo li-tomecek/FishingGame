@@ -151,7 +151,7 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: fdfd78e08f9d595409bab78b94ea54eb, type: 2}
   musicMixer: {fileID: -4924213260951808113, guid: fdfd78e08f9d595409bab78b94ea54eb, type: 2}
   sfxMixer: {fileID: 5407884364407427859, guid: fdfd78e08f9d595409bab78b94ea54eb, type: 2}
-  defaultMusic: {fileID: 0}
+  defaultMusic: {fileID: 11400000, guid: 522abaf348e83754eb34f6ffbfdfd40b, type: 2}
   _buttonClickSFX: {fileID: 11400000, guid: fb210a6a129af1040bb54030099662a6, type: 2}
 --- !u!4 &50910489
 Transform:

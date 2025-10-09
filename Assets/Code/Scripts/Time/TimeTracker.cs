@@ -28,6 +28,7 @@ public class TimeTracker : Singleton<TimeTracker>
         {
             DayComplete?.Invoke();
             _dayComplete = true;
+            LevelManager.Instance.LoadResultsScene();
             return;
         }
 

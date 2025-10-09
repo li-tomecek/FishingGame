@@ -86,6 +86,16 @@ public class AudioManager : Singleton<AudioManager>
         source.pitch = sfx.Pitch;
     }
 
+    public void PlayDefaultMusic()
+    {
+        if(!_musicSource.isPlaying && defaultMusic != null)
+            PlayMusic(defaultMusic);
+    }
+    public void StopMusic()
+    {
+        _musicSource.Stop();
+    }
+
     private AudioSource GetAvailableSFXSource()
     {
         foreach (AudioSource soundEffectSource in _soundEffectSources)
