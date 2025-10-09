@@ -62,7 +62,6 @@ public class ResultsMenu : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        Debug.Log("return to main menu");
         LevelManager.Instance.LoadMainMenu();
     }
 }
